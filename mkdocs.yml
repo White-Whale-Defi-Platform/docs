@@ -1,0 +1,32 @@
+# Project information
+site_name: White Whale Docs
+site_url: https://whitewhale.finance
+site_author: White Whale
+
+# Repository
+repo_name: docs
+repo_url: https://github.com/White-Whale-Defi-Platform/docs
+edit_uri: edit/master/docs
+
+# Navigation
+# nav:
+#   - Welcome:
+#     - About: README.md
+
+plugins:
+- search
+- literate-nav:
+    nav_file: SUMMARY.md
+
+# Theme
+theme:
+  name: "material"
+  palette:
+    scheme: default
+    primary: black
+    accent: green
+  icon:
+    logo: wwlogo
+  favicon: favicon.png
+  custom_dir: assets
+  
