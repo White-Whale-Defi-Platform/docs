@@ -25,9 +25,9 @@ Further documentation of White Whale Protocol is provided in the following pages
 
 Learn more about White Whale Protocol, its core smart contracts, and Javascript SDK.
 
-* Learn more about the [Protocol](protocol/Overview.md).
+* Learn more about the [Governance](protocol/governance/Governance-Overview.md).
 * Read up on the specifications for the [White Whale Protocol](#). 
-* Check out the [Smart Contracts](#).
+* Check out the [User Guide](user-guide/README.md).
 
 ## Community
 

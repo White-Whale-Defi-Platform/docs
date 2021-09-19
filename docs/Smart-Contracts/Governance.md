@@ -64,7 +64,7 @@ pub struct InstantiateMsg {
 
 ### `Receive`
 
-Can be called during a CW20 token transfer when the Gov contract is the recipient. Allows the token transfer to execute a [Receive Hook](gov.md#receive-hooks) as a subsequent action within the same transaction.
+Can be called during a CW20 token transfer when the Gov contract is the recipient. Allows the token transfer to execute a [Receive Hook](Governance.md#receive-hooks) as a subsequent action within the same transaction.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -93,7 +93,7 @@ pub enum HandleMsg {
 | :--- | :--- | :--- |
 | `amount` | Uint128 | Amount of tokens received |
 | `sender` | HumanAddr | Sender of token transfer |
-| `msg`\* | Binary | Base64-encoded JSON of [Receive Hook](gov.md#receive-hooks) |
+| `msg`\* | Binary | Base64-encoded JSON of [Receive Hook](Governance.md#receive-hooks) |
 
 \* = optional
 
@@ -324,7 +324,7 @@ pub enum HandleMsg {
 
 ### `SnapshotPoll`
 
-Snapshots the total amount of staked WHALE and stores the number to the specified poll. This staked WHALE amount is used to determine the degree of participation for this poll, calculated by dividing the total amount of WHALE voted to the poll with the total staked WHALE supply at the time of [EndPoll](gov.md#endpoll). Can only be issued within a window of `snapshot_period` blocks before the poll's `end_height`.
+Snapshots the total amount of staked WHALE and stores the number to the specified poll. This staked WHALE amount is used to determine the degree of participation for this poll, calculated by dividing the total amount of WHALE voted to the poll with the total staked WHALE supply at the time of [EndPoll](Governance.md#endpoll). Can only be issued within a window of `snapshot_period` blocks before the poll's `end_height`.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
