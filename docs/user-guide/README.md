@@ -18,9 +18,7 @@ The White Whale web app requires [Google Chrome](https://www.google.com/chrome/)
 
 ## Terra Station Extension
 
-{% hint style="warning" %}
-As of March 17th, 2021, Station Extension is only available for Chromium-based web browsers.
-{% endhint %}
+> As of March 17th, 2021, Station Extension is only available for Chromium-based web browsers.
 
 Station Extension is a Chrome extension that lets users interact with smart contract web frontends with an embedded in-browser wallet. When a user makes an interaction on Anchor WebApp, the WebApp will generate a transaction in the proper format that encodes the user's desired operation. Station Extension will detect and prompt the user to sign and broadcast the transaction to actually execute the operation.
 
