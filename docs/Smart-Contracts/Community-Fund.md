@@ -41,7 +41,6 @@ pub struct InstantiateMsg {
 }
 ```
 
-
 | Name | Type | Description |
 | :--- | :--- | :--- |
 | `whale_token_addr` | CanonicalAddr | Contract address of Whale Token |
@@ -215,10 +214,8 @@ pub enum ExecuteMsg {
 
 ### `Config`
 
-Gets the Collector contract configuration.
+Gets the Community Fund contract configuration.
 
-{% tabs %}
-{% tab title="Rust" %}
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
@@ -226,16 +223,12 @@ pub enum QueryMsg {
     Config {}
 }
 ```
-{% endtab %}
 
-{% tab title="JSON" %}
 ```javascript
 {
   "config": {}
 }
 ```
-{% endtab %}
-{% endtabs %}
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
@@ -243,31 +236,78 @@ pub enum QueryMsg {
 
 ### `ConfigResponse`
 
-{% tabs %}
-{% tab title="Rust" %}
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct ConfigResponse {
-    pub gov_contract: String,
-    pub anchor_token: String,
-    pub spend_limit: Uint128,
+    pub token_addr: Addr,
+    pub pool_addr: Addr,
+    pub anchor_money_market_addr: Addr,
+    pub aust_addr: Addr,
+    pub anchor_deposit_threshold: Uint128,
+    pub anchor_withdraw_threshold: Uint128,
 }
 ```
-{% endtab %}
 
-{% tab title="JSON" %}
 ```javascript
 {
-  "gov_contract": "terra1...", 
-  "anchor_token": "terra1...", 
-  "spend_limit": "100000000000" 
+  "token_addr": "terra1...", 
+  "pool_addr": "terra1...", 
+  "anchor_money_market_addr": "terra1...", 
+  "aust_addr": "terra1...", 
+  "anchor_deposit_threshold": "100000000000",
+  "anchor_withdraw_threshold": "100000000000" 
 }
 ```
-{% endtab %}
-{% endtabs %}
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| `gov_contract` | String | Contract address of Gov |
-| `anchor_token` | String | Contract address of Anchor Token \(ANC\) |
-| `spend_limit` | Uint128 | Upper cap on community grant size |
+| `token_addr` | CanonicalAddr | Contract address of Whale Token |
+| `pool_addr` | CanonicalAddr | Contract address of Whale UST Pool |
+| `anchor_money_market_addr` | CanonicalAddr | Contract address of Anchor money market module |
+| `aust_addr` | CanonicalAddr | Contract address of Anchor UST token |
+| `anchor_deposit_threshold` | Uint128 | The deposit threshold determines the minimum amount of UST the contract has to own before it can deposit those funds into Anchor |
+| `anchor_withdraw_threshold` | Uint128 | The withdraw threshold determines the minimum amount of aUST the contract has to own before it can withdraw those funds from Anchor |
+
+### `Admin`
+
+Gets the Community Fund contract registered Admin. On launch and thereafter this should be the Governance contract.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum QueryMsg {
+    Admin {}
+}
+```
+
+```javascript
+{
+  "admin": {}
+}
+```
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+|  |  |  |
+
+### `AdminResponse`
+
+> Note: The AdminResponse object is imported from the `cw_controllers` package. This definition may change
+> as that package is updated
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema, Debug)]
+pub struct AdminResponse {
+    pub admin: Option<String>,
+}
+```
+
+```javascript
+{
+  "admin": "terra1...", 
+}
+```
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `admin` | CanonicalAddr | Contract address of registered Admin of the contract |
