@@ -11,8 +11,8 @@ It is controlled by the governance contract and serves to both grow its holdings
 | `whale_pool_addr` | CanonicalAddr | Contract address of Whale UST Pool |
 | `anchor_money_market_addr` | CanonicalAddr | Contract address of Anchor money market module |
 | `aust_addr` | CanonicalAddr | Contract address of Anchor UST token |
-| `deposits_in_uusd` | Uint128 | Upper cap on community grant size |
-| `last_deposit_in_uusd` | Uint128 | Upper cap on community grant size |
+| `deposits_in_uusd` | Uint128 | State value which tracks the total value of deposits in the vault. Starts at 0 |
+| `last_deposit_in_uusd` | Uint128 | State value which tracks the value of the last deposit. Starts at 0 |
 | `anchor_deposit_threshold` | Uint128 | The deposit threshold determines the minimum amount of UST the contract has to own before it can deposit those funds into Anchor. |
 | `anchor_withdraw_threshold` | Uint128 | The withdraw threshold determines the minimum amount of aUST the contract has to own before it can withdraw those funds from Anchor. |
 
@@ -54,7 +54,10 @@ pub struct InstantiateMsg {
 
 ### `UpdateAdmin`
 
-Updates the Collector contract admin.
+Updates the Community fund contract admin.
+
+> Note: The AdminResponse object is imported from the `cw_controllers` package. This definition may change
+> as that package is updated
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -137,10 +140,9 @@ pub enum ExecuteMsg {
 
 ### `Deposit`
 
-Deposit enables the deposit of UST or depending on the amount of interest in the fund may perform a purchase of WHALE tokens. The deposit function first performs two checks, that only 1 type of token is being sent in and that that token is UST.
+Deposit enables the deposit of UST or depending on the amount of interest in the fund may perform a purchase of WHALE tokens. The deposit function first performs two checks, that only 1 type of token is being sent in and that the token is UST.
 
-Every time a deposit is triggered, a check is performed on the amount of aUST in the vault which represents the amount of UST deposited into Anchor. If the `anchor deposit value < total UST deposited + threshold` then the funds will be deposited into Anchor.
-Alternatively if the threshold is exceeded, instead, the interest is calculated and is then spent. First a withdrawal is performed for an amount which represents the excess interest in Anchor. After the withdrawal, another message is prepared and executed which buys WHALE tokens with the withdrawn UST.
+Every time a deposit is triggered, a check is performed on the amount of aUST in the vault which represents the amount of UST deposited into Anchor. If the `anchor deposit value < total UST deposited + threshold` then the funds will be deposited into Anchor. Else, if the threshold is exceeded, instead, the interest is calculated and is then spent. First a withdrawal is performed for an amount which represents the excess interest in Anchor. After the withdrawal, another message is prepared and executed which buys WHALE tokens with the withdrawn UST.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -240,7 +242,7 @@ pub enum QueryMsg {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct ConfigResponse {
     pub token_addr: Addr,
-    pub pool_addr: Addr,
+    pub ust_pool_addr: Addr,
     pub anchor_money_market_addr: Addr,
     pub aust_addr: Addr,
     pub anchor_deposit_threshold: Uint128,
