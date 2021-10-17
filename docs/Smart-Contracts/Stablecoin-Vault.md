@@ -73,3 +73,229 @@ pub struct InstantiateMsg {
 | `community_fund_fee` | Decimal | Configurable fee rate for the community fund |
 | `max_community_fund_fee` | Uint128 | Absolute max rate for community fund |
 | `anchor_min_withdraw_amount` | Uint128 | Minimum UST withdraw required to trigger a withdrawal from Anchor Money Market |
+
+## ExecuteMsg
+
+### `Receive`
+
+Can be called during a CW20 token transfer when tokens are deposited into the Stablecoin Vault. Allows the token transfer to execute a [Receive Hook](Stablecoin-Vault.md#receive-hooks) as a subsequent action within the same transaction.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum HandleMsg {
+    Receive {
+        amount: Uint128,
+        sender: HumanAddr,
+        msg: Option<Binary>,
+    }
+}
+```
+
+```javascript
+{
+  "receive": {
+    "amount": "10000000",
+    "sender": "terra1...",
+    "msg": "eyAiZXhlY3V0ZV9tc2ciOiAiYmluYXJ5IiB9"
+  }
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `amount` | Uint128 | Amount of tokens received |
+| `sender` | HumanAddr | Sender of token transfer |
+| `msg`\* | Binary | Base64-encoded JSON of [Receive Hook](Stablecoin-Vault.md#receive-hooks) |
+
+\* = optional
+
+### AbovePeg
+
+Attempt to perform an arbitrage operation with the assumption that the token to be arb'd is above peg
+
+This is important as checks are performed to ensure the arb opportunity still exists and price is indeed above peg.
+
+If needed, funds are withdrawn from anchor and messages are prepared to perform the swaps. Before sending; two Profit Check contract messages are also added by providing the `swapmsg` and `terraswap` msg to `add_profit_check` function.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    AbovePeg {
+        amount: Coin,
+        uaust_withdraw_amount: Uint128,
+    }
+}
+```
+
+```javascript
+{
+  "receive": {
+    "amount": "10000000",
+    "uaust_withdraw_amount": "5000000",
+  }
+}
+```
+
+### BelowPeg
+
+Attempt to perform an arbitrage operation with the assumption that the token to be arb'd is below it's peg.
+
+This is important as checks are performed to ensure the arb opportunity still exists and price is indeed below it's peg.
+
+If needed, funds are withdrawn from anchor and messages are prepared to perform the swaps. Before sending; two Profit Check contract messages are also added by providing the `swapmsg` and `terraswap` msg to `add_profit_check` function.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    BelowPeg {
+        amount: Coin,
+        uaust_withdraw_amount: Uint128,
+    }
+}
+```
+
+```javascript
+{
+  "receive": {
+    "amount": "10000000",
+    "uaust_withdraw_amount": "5000000",
+  }
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `amount` | Coin | Amount of tokens to trade |
+| `uaust_withdraw_amount` | Uint128 | If this value is non-zero, it represents the amount of money which the contract will attempt to withdraw from anchor to execute the arbitrage trade |
+
+### ProvideLiquidity
+
+Attempt to perform a deposit into the vault by providing UST liquidity. Protocol fees for the White Whale platform are calculated and subtracted from the deposit automatically. Fees are then distributed accordingly to the Community Fund.
+In the event of a successful deposit, the address will receive back newly minted LP tokens representing their share of the Vault's liquidity. These LP tokens are then needed when an account wishes to withdraw liquidity.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    ProvideLiquidity {
+        asset: Asset
+    }
+}
+```
+
+```javascript
+{
+  "provide_liquidity": {
+    "asset": {
+        "info": {
+            "native_token": { "denom": "uusd" }
+        },
+        "amount": "10000000"
+    }
+  }
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `asset` | Asset | Asset to be provided as liquidity. Includes asset info and amount. |
+
+### AnchorDeposit
+
+Trigger the Vault to try and perform a deposit of the specified amount of `Coin` into Anchor Money Market.
+
+Checks are performed to ensure the `Coin` is UST and then the funds are deposited to Anchor.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    AnchorDeposit {
+        amount: Coin
+    }
+}
+```
+
+```javascript
+{
+  "provide_liquidity": {
+    "anchor_deposit": {
+         "amount": {
+             "denom": "uusd",
+             "amount": "10000000"
+         }
+    }
+  }
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `amount` | Coin | Coin to be deposited into Anchor. Includes asset denom and amount. Denom must be `uusd` but this check may be removed in other vaults |
+
+### SetSlippage
+
+Change the slippage parameter for the Stablecoin Vault which represents the maximum allowed slippage. Can only be called by the established Admin of the contract.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    SetSlippage {
+        slippage: Decimal
+    }
+}
+```
+
+```javascript
+{
+  "set_slipage": {
+    "slippage": "0.005"
+  }
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `slippage` | Decimal | New slippage value to be set. |
+
+### SetAdmin
+
+Change the established Admin for the Stablecoin Vault. Can only be called by the currently established Admin of the contract.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    SetAdmin {
+        admin: Addr
+    }
+}
+```
+
+```javascript
+{
+  "set_admin": {
+    "admin": "terra1..."
+  }
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `admin` | Addr | Address of the new Admin. |
+
+### SetTrader
+
+TODO: Finish
+
+### SetFee
+
+TODO: Finish
+
+## Receive Hooks
+
+## QueryMsg
