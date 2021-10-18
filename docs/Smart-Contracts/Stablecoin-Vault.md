@@ -12,7 +12,6 @@ The Stablecoin Vault Contract is one of the flagship contracts in the White Whal
 | `aust_address` | CanonicalAddr | Contract address of aUST token |
 | `seignorage_address` | CanonicalAddr | Contract address of Seignorage system. This is used for burning/minting as a part of L1 arbitrage |
 | `profit_check_address` | CanonicalAddr | Contract address of Profit Check Contract. |
-| `anchor_min_withdraw_amount` | Uint128 | Minimum UST withdraw required to trigger a withdrawal from Anchor Money Market |
 
 ## InstantiateMsg
 
@@ -27,12 +26,13 @@ pub struct InstantiateMsg {
     pub community_fund_addr: String,
     pub warchest_addr: String,
     pub asset_info: AssetInfo,
-    pub slippage: Decimal,
     pub token_code_id: u64,
     pub warchest_fee: Decimal,
     pub community_fund_fee: Decimal,
     pub max_community_fund_fee: Uint128,
-    pub anchor_min_withdraw_amount: Uint128
+    pub stable_cap: Uint128,
+    pub vault_lp_token_name: Option<String>,
+    pub vault_lp_token_symbol: Option<String>
 }
 ```
 
@@ -46,15 +46,15 @@ pub struct InstantiateMsg {
     "anchor_money_market_address": '<Anchor MM Address>',
     "seignorage_address": '<Seignorage Address>',
     "profit_check_address": '<Profit Check Address>',
-    "slippage": "0.01",
     "token_code_id": 148,
     "community_fund_addr": "<Community Fund Address>",
     "warchest_addr": "<Warchest Fund Address>",
     "warchest_fee": "0.001",
     "community_fund_fee": "0.005",
     "max_community_fund_fee": "1000000",
-    "denom": "uusd",
-    "anchor_min_withdraw_amount": "100000000"
+    "stable_cap": "100000000",
+    "vault_lp_token_name": "Stable Coin Vault LP Token"
+    "vault_lp_token_name": "vaultLP"
 }
 ```
 
@@ -67,12 +67,13 @@ pub struct InstantiateMsg {
 | `profit_check_address` | CanonicalAddr | Contract address of Profit Check Contract |
 | `warchest_address` | CanonicalAddr | Contract address of Profit Check Contract |
 | `asset_info` | AssetInfo | Struct detailing the token to be used for trading |
-| `slippage` | Decimal | Slippage rate regarded as acceptable. |
 | `token_code_id` | u64 | The Stored Code Object ID for the LP token creator. This is used on instantiation to creation an LP token when the Vault is created |
 | `warchest_fee` | Decimal | Configurable fee rate for the warchest contract. |
 | `community_fund_fee` | Decimal | Configurable fee rate for the community fund |
 | `max_community_fund_fee` | Uint128 | Absolute max rate for community fund |
-| `anchor_min_withdraw_amount` | Uint128 | Minimum UST withdraw required to trigger a withdrawal from Anchor Money Market |
+| `stable_cap` | Uint128 | Initial UST_CAP value which represents the cap of liquid UST kept outside of Anchor |
+| `vault_lp_token_name` | Uint128 | Absolute max rate for community fund |
+| `vault_lp_token_symbol` | Uint128 | Absolute max rate for community fund |
 
 ## ExecuteMsg
 
@@ -112,11 +113,9 @@ pub enum HandleMsg {
 
 ### AbovePeg
 
-Attempt to perform an arbitrage operation with the assumption that the token to be arb'd is above peg
+Attempt to perform an arbitrage operation with the assumption that the currency to be arb'd is below peg.
 
-This is important as checks are performed to ensure the arb opportunity still exists and price is indeed above peg.
-
-If needed, funds are withdrawn from anchor and messages are prepared to perform the swaps. Before sending; two Profit Check contract messages are also added by providing the `swapmsg` and `terraswap` msg to `add_profit_check` function.
+If needed, funds are withdrawn from anchor and messages are prepared to perform the swaps. Two calls to a profit_check contract surround the trade msgs to ensure the trade only finalizes if the contract makes a profit.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -124,7 +123,8 @@ If needed, funds are withdrawn from anchor and messages are prepared to perform 
 pub enum ExecuteMsg {
     AbovePeg {
         amount: Coin,
-        uaust_withdraw_amount: Uint128,
+        slippage: Decimal,
+        belief_price: Decimal
     }
 }
 ```
@@ -133,35 +133,8 @@ pub enum ExecuteMsg {
 {
   "receive": {
     "amount": "10000000",
-    "uaust_withdraw_amount": "5000000",
-  }
-}
-```
-
-### BelowPeg
-
-Attempt to perform an arbitrage operation with the assumption that the token to be arb'd is below it's peg.
-
-This is important as checks are performed to ensure the arb opportunity still exists and price is indeed below it's peg.
-
-If needed, funds are withdrawn from anchor and messages are prepared to perform the swaps. Before sending; two Profit Check contract messages are also added by providing the `swapmsg` and `terraswap` msg to `add_profit_check` function.
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    BelowPeg {
-        amount: Coin,
-        uaust_withdraw_amount: Uint128,
-    }
-}
-```
-
-```javascript
-{
-  "receive": {
-    "amount": "10000000",
-    "uaust_withdraw_amount": "5000000",
+    "slippage": "0.005",
+    "belief_price": "0.005"
   }
 }
 ```
@@ -169,12 +142,49 @@ pub enum ExecuteMsg {
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `amount` | Coin | Amount of tokens to trade |
-| `uaust_withdraw_amount` | Uint128 | If this value is non-zero, it represents the amount of money which the contract will attempt to withdraw from anchor to execute the arbitrage trade |
+| `slippage` | Decimal | Maximum accepted slippage rate |
+| `belief_price` | Decimal | The price the caller believes it should get |
+
+### BelowPeg
+
+Attempt to perform an arbitrage operation with the assumption that the currency to be arb'd is below peg.
+
+If needed, funds are withdrawn from anchor and messages are prepared to perform the swaps. Two calls to a profit_check contract surround the trade msgs to ensure the trade only finalizes if the contract makes a profit.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    BelowPeg {
+        amount: Coin,
+        slippage: Decimal,
+        belief_price: Decimal
+    }
+}
+```
+
+```javascript
+{
+  "receive": {
+    "amount": "10000000",
+    "slippage": "0.005",
+    "belief_price": "0.005"
+  }
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `amount` | Coin | Amount of tokens to trade |
+| `slippage` | Decimal | Maximum accepted slippage rate |
+| `belief_price` | Decimal | The price the caller believes it should get |
 
 ### ProvideLiquidity
 
 Attempt to perform a deposit into the vault by providing UST liquidity. Protocol fees for the White Whale platform are calculated and subtracted from the deposit automatically. Fees are then distributed accordingly to the Community Fund.
 In the event of a successful deposit, the address will receive back newly minted LP tokens representing their share of the Vault's liquidity. These LP tokens are then needed when an account wishes to withdraw liquidity.
+
+This function should be called alongside a deposit of UST into the contract.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -203,64 +213,31 @@ pub enum ExecuteMsg {
 | :--- | :--- | :--- |
 | `asset` | Asset | Asset to be provided as liquidity. Includes asset info and amount. |
 
-### AnchorDeposit
+### SetStableCap
 
-Trigger the Vault to try and perform a deposit of the specified amount of `Coin` into Anchor Money Market.
-
-Checks are performed to ensure the `Coin` is UST and then the funds are deposited to Anchor.
+Change the UST_CAP parameter for the Stablecoin Vault which represents the cap of liquid UST kept in the vault. Deposits in excess of the cap will be deposited into anchor. Can only be called by the established Admin of the contract.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    AnchorDeposit {
-        amount: Coin
+    SetStableCap {
+        stable_cap: Uint128
     }
 }
 ```
 
 ```javascript
 {
-  "provide_liquidity": {
-    "anchor_deposit": {
-         "amount": {
-             "denom": "uusd",
-             "amount": "10000000"
-         }
-    }
+  "set_stable_cap": {
+    "stable_cap": "1000000"
   }
 }
 ```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
-| `amount` | Coin | Coin to be deposited into Anchor. Includes asset denom and amount. Denom must be `uusd` but this check may be removed in other vaults |
-
-### SetSlippage
-
-Change the slippage parameter for the Stablecoin Vault which represents the maximum allowed slippage. Can only be called by the established Admin of the contract.
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    SetSlippage {
-        slippage: Decimal
-    }
-}
-```
-
-```javascript
-{
-  "set_slipage": {
-    "slippage": "0.005"
-  }
-}
-```
-
-| Key | Type | Description |
-| :--- | :--- | :--- |
-| `slippage` | Decimal | New slippage value to be set. |
+| `stable_cap` | Uint128 | New UST_CAP value to be set |
 
 ### SetAdmin
 
@@ -337,7 +314,7 @@ pub enum ExecuteMsg {
       "fee": {
         "share": "0.01"
       }
-    }
+    },
     "warchest_fee": {
       "fee":{
         "share": "0.01"
@@ -356,7 +333,47 @@ pub enum ExecuteMsg {
 
 ## Receive Hooks
 
-TODO: Receive Hooks
+Payable functions when you send a payment to the contract with an appropriate message.
+
+### `WithdrawLiquidity`
+
+Attempt to withdraw deposits. Fees are calculated and deducted. The refund is taken out of Anchor if possible. Luna holdings are not eligible for withdrawal.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum Cw20HookMsg {
+    WithdrawLiquidity {},
+}
+```
+
+```javascript
+{
+  "withdraw_liquidity": {}
+}
+```
+
+## Callbacks
+
+Callback Functions are used in conjunction with other ExecuteMsg functions in the Stablecoin Vault.
+
+### `AfterSuccessfulTradeCallback`
+
+After a successful trade happens, check if the contract currently holds more than the ANCHOR_DEPOSIT_THRESHOLD. If it does, attempt to deposit most of the funds into Anchor, leaving a predefined amount behind which is called the Stable Cap or the UST_CAP.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum CallbackMsg {
+    AfterSuccessfulTradeCallback {},
+}
+```
+
+```javascript
+{
+  "after_successful_trade_callback": {}
+}
+```
 
 ## QueryMsg
 
