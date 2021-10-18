@@ -360,3 +360,295 @@ TODO: Receive Hooks
 
 ## QueryMsg
 
+### `Config`
+
+Gets the configuration for the Stablecoin Vault contract.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum QueryMsg {
+    Config {} 
+}
+```
+
+```javascript
+{
+  "config": {} 
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+|  |  |  |
+
+### `PoolInfo`
+
+```rust
+#[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema)]
+pub struct PoolInfo {
+    pub asset_infos: [AssetInfo; 3],
+    pub contract_addr: Addr,
+    pub liquidity_token: Addr,
+    pub slippage: Decimal
+}
+```
+
+```javascript
+{
+  "asset_info": [
+      {
+        "info" : {
+            "token": {
+                "contract_addr": "<HumanAddr>"
+            }
+        },
+        "amount": "10"
+      },
+      {
+        "info" : {
+            "native_token": {
+                "denom": "uluna"
+            }
+        },
+        "amount": "10"
+      }
+    ],
+  "contract_addr": "terra1...",
+  "liquidity_token": "terra1...",
+  "slippage": "0.005"
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `asset_info` | AssetInfo | Collection of Assets in the Pool and their information. |
+| `contract_addr` | Addr | Address of the LP token contract. |
+| `liquidity_token` | Addr | Address of the LP token |
+| `slippage` | Decimal | Maximum accepted slippage value per trade. |
+
+### `Pool`
+
+Gets the pool created by the Stablecoin Vault contract.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum QueryMsg {
+    Pool {} 
+}
+```
+
+```javascript
+{
+  "pool": {} 
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+|  |  |  |
+
+### `PoolResponse`
+
+```rust
+#[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema)]
+pub struct PoolResponse {
+    pub asset_infos: [AssetInfo; 3],
+    pub contract_addr: Addr,
+    pub liquidity_token: Addr,
+    pub slippage: Decimal
+}
+```
+
+```javascript
+{
+  "asset_info": [
+      {
+        "info" : {
+            "token": {
+                "contract_addr": "<HumanAddr>"
+            }
+        },
+        "amount": "10"
+      },
+      {
+        "info" : {
+            "native_token": {
+                "denom": "uluna"
+            }
+        },
+        "amount": "10"
+      }
+    ],
+  "contract_addr": "terra1...",
+  "liquidity_token": "terra1...",
+  "slippage": "0.005"
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `asset_info` | AssetInfo | Collection of Assets in the Pool and their information. |
+| `contract_addr` | Addr | Address of the LP token contract. |
+| `liquidity_token` | Addr | Address of the LP token |
+| `slippage` | Decimal | Maximum accepted slippage value per trade. |
+
+### `Fees`
+
+Gets the fees structure set by the Stablecoin Vault contract.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum QueryMsg {
+    Fees {} 
+}
+```
+
+```javascript
+{
+  "fees": {} 
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+|  |  |  |
+
+### `FeeResponse`
+
+```rust
+pub struct FeeResponse {
+    pub fees: VaultFee,
+}
+```
+
+### `VaultFee`
+
+```rust
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct VaultFee {
+    pub community_fund_fee: CappedFee,
+    pub warchest_fee: Fee,
+    pub community_fund_addr: CanonicalAddr,
+    pub warchest_addr: CanonicalAddr
+}
+```
+
+```javascript
+{
+  "fees": {
+    "community_fund_fee": {
+      "max_fee": "10000000",
+      "fee": {
+        "share": "0.01"
+      }
+    }
+    "warchest_fee": {
+      "fee":{
+        "share": "0.01"
+      }
+    }
+    "community_fund_addr": "terra1...",
+    "warchest_addr": "terra1..."
+  }
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `community_fund_fee` | CappedFee | Fee information related to Community Fund fee distribution. |
+| `warchest_fee` | Fee | Fee information related to Warchest fee distribution. |
+| `community_fund_addr` | CanonicalAddr | Address of the Community Fund Contract |
+| `warchest_addr` | CanonicalAddr | Address of the Community Fund Contract |
+
+### `EstimateDepositFee`
+
+Query to provide an estimate of the Stablecoin Vault deposit fee, less tax.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum QueryMsg {
+    EstimateDepositFee{ amount: Uint128 }
+}
+```
+
+```javascript
+{
+  "estimate_deposit_fee": { "amount": "100000"} 
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `amount` | Uint128 | Deposit amount to calculate a deposit fee for |
+
+### `EstimateDepositFeeResponse`
+
+```rust
+pub struct EstimateDepositFeeResponse {
+    pub fee: Vec<Coin>,
+}
+```
+
+```javascript
+{
+  "fee": [
+    {
+      "denom": "uusd",
+      "amount": "1000000"
+    }
+  ]
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `fee` | Vec | Vector containing fee info in the form of Coins |
+
+### `EstimateWithdrawFee`
+
+Query to provide an estimate of the Stablecoin Vault withdrawal fee, less tax.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum QueryMsg {
+    EstimateWithdrawFee{ amount: Uint128 }
+}
+```
+
+```javascript
+{
+  "estimate_withdraw_fee": { "amount": "100000"} 
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `amount` | Uint128 | Deposit amount to calculate a deposit fee for |
+
+### `EstimateWithdrawFeeResponse`
+
+```rust
+pub struct EstimateWithdrawFeeResponse {
+    pub fee: Vec<Coin>,
+}
+```
+
+```javascript
+{
+  "fee": [
+    {
+      "denom": "uusd",
+      "amount": "1000000"
+    }
+  ]
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `fee` | Vec | Vector containing fee info in the form of Coins |
