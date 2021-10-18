@@ -290,12 +290,73 @@ pub enum ExecuteMsg {
 
 ### SetTrader
 
-TODO: Finish
+Update the address of the nominated trader. Can only be called by Admin.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    SetTrader {
+        trader: Addr
+    }
+}
+```
+
+```javascript
+{
+  "set_trader": {
+    "trader": "terra1..."
+  }
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `trader` | Addr | Address of the new Trader. |
 
 ### SetFee
 
-TODO: Finish
+Update the fee information for 1 or more of the associated fee structures. Can only be called by Admin
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    SetFee{
+        community_fund_fee: Option<CappedFee>,
+        warchest_fee: Option<Fee>,
+    }
+}
+```
+
+```javascript
+{
+  "set_fee": {
+    "community_fund_fee": {
+      "max_fee": "10000000",
+      "fee": {
+        "share": "0.01"
+      }
+    }
+    "warchest_fee": {
+      "fee":{
+        "share": "0.01"
+      }
+    }
+  }
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `community_fund_fee`\* | CappedFee | New fee values for fee allocation to the Community Fund |
+| `warchest_fee`\* | CappedFee | New fee values for fee allocation to the Warchest |
+
+\* = optional
 
 ## Receive Hooks
 
+TODO: Receive Hooks
+
 ## QueryMsg
+
