@@ -1,13 +1,13 @@
 # Stablecoin Vault
 
-The Stablecoin Vault Contract is one of the flagship contracts in the White Whale system. It combined with a bot system allows for the automated trading of UST in response to a de-pegging event or to just perform a simple arbitrage operation. The Stablecoin Vault allows users to deposit just UST to then be exposed to arbitrage operations.
+The Stablecoin Vault Contract is one of the flagship contracts in the White Whale system. Combined with a bot system, the Vault contract allows for the automated trading of UST in response to a de-pegging event or to just perform a simple arbitrage operation. The Stablecoin Vault allows users to deposit just UST to then be exposed to arbitrage operations.
 
 ## Config
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `trader` | CanonicalAddr | Address of the assigned trader for this vault |
-| `pool_address` | CanonicalAddr | Contract address of TerraSwap pool that will be interacted with for trades|
+| `ust_pool_address` | CanonicalAddr | Contract address of TerraSwap pool that will be interacted with for trades |
 | `anchor_money_market_address` | CanonicalAddr | Contract address of Anchor Money Market system. This is used for depositing and withdrawing from Anchor |
 | `aust_address` | CanonicalAddr | Contract address of aUST token |
 | `seignorage_address` | CanonicalAddr | Contract address of Seignorage system. This is used for burning/minting as a part of L1 arbitrage |
@@ -18,7 +18,7 @@ The Stablecoin Vault Contract is one of the flagship contracts in the White Whal
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {
-    pub pool_address: String,
+    pub ust_pool_address: String,
     pub anchor_money_market_address: String,
     pub aust_address: String,
     pub seignorage_address: String,
@@ -38,7 +38,7 @@ pub struct InstantiateMsg {
 
 ```javascript
 {
-    "pool_address": '<UST Address>',
+    "ust_pool_address": '<UST Address>',
     "asset_info": {
         "native_token": { "denom": "uusd" }
     },
@@ -60,7 +60,7 @@ pub struct InstantiateMsg {
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
-| `pool_address` | CanonicalAddr | Contract address of TerraSwap pool that will be interacted with for trades  d|
+| `ust_pool_address` | CanonicalAddr | Contract address of TerraSwap pool that will be interacted with for trades  d|
 | `anchor_money_market_address` | CanonicalAddr | Contract address of Anchor Money Market system. This is used for depositing and withdrawing from Anchor |
 | `aust_address` | CanonicalAddr | Contract address of aUST token |
 | `seignorage_address` | CanonicalAddr | Contract address of Seignorage system. This is used for burning/minting as a part of L1 arbitrage |
@@ -113,7 +113,7 @@ pub enum HandleMsg {
 
 ### AbovePeg
 
-Attempt to perform an arbitrage operation with the assumption that the currency to be arb'd is below peg.
+Attempt to perform an arbitrage operation with the assumption that the currency to be arb'd is above peg.
 
 If needed, funds are withdrawn from anchor and messages are prepared to perform the swaps. Two calls to a profit_check contract surround the trade msgs to ensure the trade only finalizes if the contract makes a profit.
 
@@ -293,7 +293,7 @@ pub enum ExecuteMsg {
 
 ### SetFee
 
-Update the fee information for 1 or more of the associated fee structures. Can only be called by Admin
+Update the fee information for 1 or more of the associated fee structures. Can only be called by Admin.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -337,7 +337,7 @@ Payable functions when you send a payment to the contract with an appropriate me
 
 ### `WithdrawLiquidity`
 
-Attempt to withdraw deposits. Fees are calculated and deducted. The refund is taken out of Anchor if possible. Luna holdings are not eligible for withdrawal.
+Attempt to withdraw deposits. Fees are calculated and deducted. If the Vault has available funds in Anchor it will attempt to payout the withdrawal request by first withdrawing some funds from Anchor to fund the withdrawal request. Luna holdings are not eligible for withdrawal. LP tokens submitted with a withdrawal request will be burned.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -582,7 +582,7 @@ pub struct VaultFee {
 
 ### `EstimateDepositFee`
 
-Query to provide an estimate of the Stablecoin Vault deposit fee, less tax.
+Query to provide an estimate of the Stablecoin Vault deposit fee minus tax.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -627,7 +627,7 @@ pub struct EstimateDepositFeeResponse {
 
 ### `EstimateWithdrawFee`
 
-Query to provide an estimate of the Stablecoin Vault withdrawal fee, less tax.
+Query to provide an estimate of the Stablecoin Vault withdrawal fee minus tax.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
