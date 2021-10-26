@@ -190,7 +190,7 @@ pub struct ConfigResponse {
 
 ### `VestingAccount`
 
-Gets information for an account with vested WHALE.
+Gets vesting information for an account with vested WHALE. Response includes the claim address and related vesting information such as schedules for claiming.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -252,7 +252,7 @@ pub struct VestingInfo {
 
 ### `VestingAccounts`
 
-Gets information for accounts with vested WHALE.
+Gets vesting information for accounts with vested WHALE. The response includes all accounts registered in the vesting contract which meet the query conditions. Each account returned in the response includes the claim address and related vesting information such as schedules for claiming.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
