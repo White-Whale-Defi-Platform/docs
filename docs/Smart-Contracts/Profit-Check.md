@@ -1,7 +1,7 @@
 # Profit Check
 
-Profit check is used by the ust vault to see if a proposed trade is indeed profitable.before_trade is called before the trade to set the account balance after_trade is called after the trade and checks weather a profit was made
-If the balance of the contract is smaller after the trade, an error gets thrown which resets the contract state to the state before the contract call.
+Profit check is used by the ust vault to see if a proposed trade is indeed profitable. `before_trade` is called before the trade to set the account balance and `after_trade` is called after the trade and checks whether a profit was made
+If the balance of the contract is smaller after the trade, a `CancelLosingTrade` error gets thrown which resets the contract state to the state before the contract call.
 
 ## Config
 
