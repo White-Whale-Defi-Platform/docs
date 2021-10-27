@@ -24,6 +24,9 @@ extra:
       link: https://twitter.com/WhiteWhaleTerra
       name: White Whale's Twitter
 
+extra_css:
+  - stylesheets/extra.css
+
 # Theme
 theme:
   name: "material"
