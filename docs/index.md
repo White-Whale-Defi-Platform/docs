@@ -10,7 +10,7 @@ Welcome to the White Whale documentation site.
 
 ## What is White Whale?
 
-**White Whale** is a arbitrage protocol devoted to maintaining the peg on Terra stablecoins. T
+**White Whale** is a arbitrage protocol devoted to maintaining the peg on Terra stablecoins.
 
 Deposited stablecoins are represented by [White Whale Terra LP \(Whale\)](protocol/whale-token#whale-token/Whale_token.md/). Whale LP tokens are redeemable for the initial deposit along with accrued interest. White Whale is structured to provide depositors with:
 
