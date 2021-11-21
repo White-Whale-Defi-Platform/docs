@@ -26,11 +26,6 @@ pub struct InstantiateMsg {
 }
 ```
 
-```javascript WIP
-{
-    
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -66,11 +61,7 @@ pub struct ArbDetails {
 
 ```
 
-```javascript
-{
-  ...
-}
-```
+
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -141,13 +132,7 @@ pub enum ExecuteMsg {
 }
 ```
 
-```javascript
-{
-  "set_admin": {
-    "admin": "terra1..."
-  }
-}
-```
+
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -169,11 +154,7 @@ pub enum CallbackMsg {
 }
 ```
 
-```javascript
-{
-  "after_successful_trade_callback": {}
-}
-```
+
 
 ## QueryMsg
 
@@ -188,13 +169,3 @@ pub enum QueryMsg {
     Config {} 
 }
 ```
-
-```javascript
-{
-  "config": {} 
-}
-```
-
-| Key | Type | Description |
-| :--- | :--- | :--- |
-|  |  |  |

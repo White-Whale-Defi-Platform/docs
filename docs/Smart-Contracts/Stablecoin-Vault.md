@@ -189,13 +189,6 @@ pub enum ExecuteMsg {
 }
 ```
 
-```javascript WIP
-{
-  "remove_from_whitelist": {
-    "contract_addr": "terra1..."
-  }
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -216,22 +209,6 @@ pub enum ExecuteMsg {
 }
 ```
 
-```javascript WIP
-{
-  "set_fee": {
-    "flash_loan_fee": {
-      "fee": {
-        "share": "0.01"
-      }
-    },
-    "warchest_fee": {
-      "fee":{
-        "share": "0.01"
-      }
-    }
-  }
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -257,12 +234,6 @@ pub enum ExecuteMsg {
 }
 ```
 
-```javascript WIP
-{
-  ...
-  }
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -289,11 +260,6 @@ pub enum Cw20HookMsg {
 }
 ```
 
-```javascript
-{
-  "withdraw_liquidity": {}
-}
-```
 
 ## Callbacks
 
@@ -311,147 +277,92 @@ pub enum CallbackMsg {
 }
 ```
 
-```javascript
-{
-  "after_successful_loan_callback": {}
-}
-```
-
 ## QueryMsg
 
-### `Config`
 
-Gets the configuration for the Stablecoin Vault contract.
+### `State`
+
+Returns the contract state.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
-    Config {} 
+    State {} 
+}
+```
+### `VaultValue`
+
+Returns the total value of UST and aUST held in the contract in UST.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum QueryMsg {
+    VaultValue {} 
 }
 ```
 
-```javascript
-{
-  "config": {} 
+### `PoolConfig`
+
+Gets the configuration for the Stablecoin Vault contract pool.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum QueryMsg {
+    PoolConfig {} 
 }
 ```
-
-| Key | Type | Description |
-| :--- | :--- | :--- |
-|  |  |  |
-
 ### `PoolInfo`
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema)]
 pub struct PoolInfo {
-    pub asset_infos: [AssetInfo; 3],
+    pub asset_infos: [AssetInfo; 2],
     pub contract_addr: Addr,
     pub liquidity_token: Addr,
-    pub slippage: Decimal
-}
-```
-
-```javascript
-{
-  "asset_info": [
-      {
-        "info" : {
-            "token": {
-                "contract_addr": "<HumanAddr>"
-            }
-        },
-        "amount": "10"
-      },
-      {
-        "info" : {
-            "native_token": {
-                "denom": "uluna"
-            }
-        },
-        "amount": "10"
-      }
-    ],
-  "contract_addr": "terra1...",
-  "liquidity_token": "terra1...",
-  "slippage": "0.005"
+    pub stable_cap: Uint128
 }
 ```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
-| `asset_info` | AssetInfo | Collection of Assets in the Pool and their information. |
-| `contract_addr` | Addr | Address of the LP token contract. |
+| `asset_infos` | [AssetInfo; 2] | Collection of Assets in the Pool and their information. In our case UST and aUST |
+| `contract_addr` | Addr | This contract's address |
 | `liquidity_token` | Addr | Address of the LP token |
-| `slippage` | Decimal | Maximum accepted slippage value per trade. |
+| `stable_cap` | Uint128 | Stablecoin reserve/cap amount |
 
-### `Pool`
+### `PoolState`
 
-Gets the pool created by the Stablecoin Vault contract.
+Gets the pool state, including the balances of the holdings.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
-    Pool {} 
+    PoolState {} 
 }
 ```
-
-```javascript
-{
-  "pool": {} 
-}
-```
-
-| Key | Type | Description |
-| :--- | :--- | :--- |
-|  |  |  |
 
 ### `PoolResponse`
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema)]
 pub struct PoolResponse {
-    pub asset_infos: [AssetInfo; 3],
+    pub asset_infos: [Asset; 2],
     pub contract_addr: Addr,
     pub liquidity_token: Addr,
-    pub slippage: Decimal
-}
-```
-
-```javascript
-{
-  "asset_info": [
-      {
-        "info" : {
-            "token": {
-                "contract_addr": "<HumanAddr>"
-            }
-        },
-        "amount": "10"
-      },
-      {
-        "info" : {
-            "native_token": {
-                "denom": "uluna"
-            }
-        },
-        "amount": "10"
-      }
-    ],
-  "contract_addr": "terra1...",
-  "liquidity_token": "terra1...",
-  "slippage": "0.005"
+    pub stable_cap: Uint128
 }
 ```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
-| `asset_info` | AssetInfo | Collection of Assets in the Pool and their information. |
-| `contract_addr` | Addr | Address of the LP token contract. |
+| `asset_infos` | [AssetInfo; 2] | Collection of Assets in the Pool and their information. In our case UST and aUST |
+| `contract_addr` | Addr | This contract's address |
 | `liquidity_token` | Addr | Address of the LP token |
-| `slippage` | Decimal | Maximum accepted slippage value per trade. |
+| `stable_cap` | Uint128 | Stablecoin reserve/cap amount |
 
 ### `Fees`
 
@@ -464,16 +375,6 @@ pub enum QueryMsg {
     Fees {} 
 }
 ```
-
-```javascript
-{
-  "fees": {} 
-}
-```
-
-| Key | Type | Description |
-| :--- | :--- | :--- |
-|  |  |  |
 
 ### `FeeResponse`
 
@@ -491,12 +392,6 @@ pub struct VaultFee {
     pub flash_loan_fee: Fee,
     pub warchest_fee: Fee,
     pub warchest_addr: CanonicalAddr
-}
-```
-
-```javascript WIP
-{
-  
 }
 ```
 
@@ -518,12 +413,6 @@ pub enum QueryMsg {
 }
 ```
 
-```javascript
-{
-  "estimate_withdraw_fee": { "amount": "100000"} 
-}
-```
-
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `amount` | Uint128 | Deposit amount to calculate a deposit fee for |
@@ -533,17 +422,6 @@ pub enum QueryMsg {
 ```rust
 pub struct EstimateWithdrawFeeResponse {
     pub fee: Vec<Coin>,
-}
-```
-
-```javascript
-{
-  "fee": [
-    {
-      "denom": "uusd",
-      "amount": "1000000"
-    }
-  ]
 }
 ```
 
