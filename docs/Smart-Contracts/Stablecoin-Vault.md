@@ -31,23 +31,6 @@ pub struct InstantiateMsg {
 }
 ```
 
-```javascript WIP
-{
-    "asset_info": {
-        "native_token": { "denom": "uusd" }
-    },
-    "aust_address": '<aUST Address>',
-    "anchor_money_market_address": '<Anchor MM Address>',
-    "profit_check_address": '<Profit Check Address>',
-    "token_code_id": 148,
-    "warchest_addr": "<Warchest Fund Address>",
-    "warchest_fee": "0.001",
-    "stable_cap": "100000000",
-    "vault_lp_token_name": "Stable Coin Vault LP Token"
-    "vault_lp_token_name": "vaultLP"
-}
-```
-
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `anchor_money_market_address` | String | Contract address of Anchor Money Market system. This is used for depositing and withdrawing from Anchor |
@@ -76,16 +59,6 @@ pub enum HandleMsg {
         sender: HumanAddr,
         msg: Option<Binary>,
     }
-}
-```
-
-```javascript
-{
-  "receive": {
-    "amount": "10000000",
-    "sender": "terra1...",
-    "msg": "eyAiZXhlY3V0ZV9tc2ciOiAiYmluYXJ5IiB9"
-  }
 }
 ```
 
@@ -119,21 +92,12 @@ pub struct FlashLoanPayload {
 }
 ```
 
-```javascript WIP
-{
-  "receive": {
-    "amount": "10000000",
-    "slippage": "0.005",
-    "belief_price": "0.005"
-  }
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
-| `amount` | Coin | Amount of tokens to trade |
-| `slippage` | Decimal | Maximum accepted slippage rate |
-| `belief_price` | Decimal | The price the caller believes it should get |
+| `requested_asset` | Asset | Requested asset, contains amount an assetinfo |
+| `callback` | Binary | The encoded callback msg provided by the calling contract |
+
 
 ### ProvideLiquidity
 
@@ -152,18 +116,6 @@ pub enum ExecuteMsg {
 }
 ```
 
-```javascript
-{
-  "provide_liquidity": {
-    "asset": {
-        "info": {
-            "native_token": { "denom": "uusd" }
-        },
-        "amount": "10000000"
-    }
-  }
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -180,14 +132,6 @@ pub enum ExecuteMsg {
     SetStableCap {
         stable_cap: Uint128
     }
-}
-```
-
-```javascript
-{
-  "set_stable_cap": {
-    "stable_cap": "1000000"
-  }
 }
 ```
 
@@ -209,14 +153,6 @@ pub enum ExecuteMsg {
 }
 ```
 
-```javascript
-{
-  "set_admin": {
-    "admin": "terra1..."
-  }
-}
-```
-
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `admin` | Addr | Address of the new Admin. |
@@ -232,14 +168,6 @@ pub enum ExecuteMsg {
     AddToWhitelist {
         contracts_addr: Addr
     }
-}
-```
-
-```javascript WIP
-{
-  "add_to_whitelist": {
-    "contract_addr": "terra1..."
-  }
 }
 ```
 

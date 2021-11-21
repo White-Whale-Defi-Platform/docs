@@ -16,7 +16,7 @@ If the balance of the contract is smaller after the trade, a `CancelLosingTrade`
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct InitMsg {
+pub struct InstantiateMsg {
     pub vault_address: String,
     pub denom: String,
 }

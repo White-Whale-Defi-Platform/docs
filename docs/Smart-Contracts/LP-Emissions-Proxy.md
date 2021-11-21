@@ -1,17 +1,19 @@
-# Terra Stablecoin Arbitrage Contracts
+# LP Emissions Proxy Contract
 
-The UST Arbitrage Contracts are our first step toward providing Anchor+ yields to depositors. These contracts are the endpoint for our bots and perform the UST -> LUNA -> UST transactions that stabilize the peg through minting/burning of luna.
+This proxy contract handles staking the provided LP tokens to our own LP emissions contract while allowing for dual incetives from Astroport. A detailed explanation can be found [here](https://astroport.medium.com/project-guide-how-to-integrate-dual-incentives-with-astroport-generators-2aa13169c5c1)
 
-This doc is valid for both the Terraswap and Astroport arbitrage contracts. 
-
-## State
+## Config
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
-| `vault_address` | CanonicalAddr | Addresses of the UST vault |
-| `seignorage_address` | CanonicalAddr | Address of the seignorage swaps that are native to the Terra infrastructure |
-| `pool_address` | CanonicalAddr | Address of either the terraswap or astroport LUNA/UST pair.  |
+| `generator_contract_addr` | Addr | Address of generator contract |
+| `pair_addr` | Addr | Address of the WHALE/UST pair |
+| `lp_token_addr` | Addr | Address of the WHALE/UST LP token |
+| `reward_contract_addr` | Addr | Address of the LP emissions contract |
+| `reward_token_addr` | Addr | Whale token address |
 
+
+## Messages
 ## InstantiateMsg
 
 ```rust
@@ -21,6 +23,12 @@ pub struct InstantiateMsg {
     pub seignorage_address: String,
     pub pool_address: String,
     pub asset_info: AssetInfo,
+}
+```
+
+```javascript WIP
+{
+    
 }
 ```
 
@@ -58,6 +66,11 @@ pub struct ArbDetails {
 
 ```
 
+```javascript
+{
+  ...
+}
+```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -79,6 +92,12 @@ pub enum ExecuteMsg {
 
 ```
 
+```javascript WIP
+{
+  
+}
+```
+
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `details` | ArbDetails | Conveys the amount, max allowed slippage and belief price |
@@ -98,6 +117,12 @@ pub enum ExecuteMsg {
 
 ```
 
+```javascript WIP
+{
+  
+}
+```
+
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `details` | ArbDetails | Conveys the amount, max allowed slippage and belief price |
@@ -113,6 +138,14 @@ pub enum ExecuteMsg {
     SetAdmin {
         admin: Addr
     }
+}
+```
+
+```javascript
+{
+  "set_admin": {
+    "admin": "terra1..."
+  }
 }
 ```
 
@@ -136,6 +169,11 @@ pub enum CallbackMsg {
 }
 ```
 
+```javascript
+{
+  "after_successful_trade_callback": {}
+}
+```
 
 ## QueryMsg
 
@@ -150,3 +188,13 @@ pub enum QueryMsg {
     Config {} 
 }
 ```
+
+```javascript
+{
+  "config": {} 
+}
+```
+
+| Key | Type | Description |
+| :--- | :--- | :--- |
+|  |  |  |
