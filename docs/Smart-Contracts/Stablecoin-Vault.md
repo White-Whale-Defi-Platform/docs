@@ -574,9 +574,8 @@ pub struct VaultFee {
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
-| `community_fund_fee` | CappedFee | Fee information related to Community Fund fee distribution. |
+| `flash_loan_fee` | Fee | Flashloan fee expected to be paid by non-whitelisted contracts |
 | `warchest_fee` | Fee | Fee information related to Warchest fee distribution. |
-| `community_fund_addr` | CanonicalAddr | Address of the Community Fund Contract |
 | `warchest_addr` | CanonicalAddr | Address of the Community Fund Contract |
 
 ### `EstimateWithdrawFee`

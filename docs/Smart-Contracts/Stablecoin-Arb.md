@@ -1,8 +1,8 @@
-# UST Arbitrage Contracts
+# Terra Stablecoin Arbitrage Contracts
 
-The UST Arbitrage Contracts are our first step toward providing Anchor+ yields to depositors. These contracts are the endpoint for our nodes and perform the UST -> LUNA -> UST transactions that stabilize the peg through minting/burning of luna.
+The UST Arbitrage Contracts are our first step toward providing Anchor+ yields to depositors. These contracts are the endpoint for our bots and perform the UST -> LUNA -> UST transactions that stabilize the peg through minting/burning of luna.
 
-This doc is valid for both the Terraswap and Astroport arbitrage methods. 
+This doc is valid for both the Terraswap and Astroport arbitrage contracts. 
 
 ## State
 
@@ -77,7 +77,7 @@ pub struct ArbDetails {
 
 ### AbovePegCallback
 
-After the stablecoin vault transfered the requested funds to this contract it will call the provided callback message. The AbovePegCallback and BelowPegCallback messages are both endpoints for the stablecoin vault. This endpoint can only be call by the vault.
+After the stablecoin vault transfered the requested funds to this contract it will call the provided callback message. The AbovePegCallback and BelowPegCallback messages are both callback endpoints for the stablecoin vault. This endpoint can only be call by the vault.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -102,7 +102,7 @@ pub enum ExecuteMsg {
 
 ### BelowPegCallback
 
-After the stablecoin vault transfered the requested funds to this contract it will call the provided callback message. The AbovePegCallback and BelowPegCallback messages are both endpoints for the stablecoin vault. This endpoint can only be call by the vault.
+After the stablecoin vault transfered the requested funds to this contract it will call the provided callback message. The AbovePegCallback and BelowPegCallback messages are both callback endpoints for the stablecoin vault. This endpoint can only be call by the vault.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
