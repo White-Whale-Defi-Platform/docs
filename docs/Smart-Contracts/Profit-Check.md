@@ -16,16 +16,9 @@ If the balance of the contract is smaller after the trade, a `CancelLosingTrade`
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct InitMsg {
+pub struct InstantiateMsg {
     pub vault_address: String,
     pub denom: String,
-}
-```
-
-```javascript
-{
-    "vault_address": 'terra1...',
-    "denom": 'uusd'
 }
 ```
 
@@ -50,17 +43,6 @@ pub enum ExecuteMsg {
 }
 ```
 
-```javascript
-{
-  "after_trade": {
-  }
-}
-```
-
-| Key | Type | Description |
-| :--- | :--- | :--- |
-|  |  |  |
-
 ### BeforeTrade
 
 Resets last trade and sets current UST balance of caller. Simply put, prepares the contracts state to record the next AfterTrade result.
@@ -74,17 +56,6 @@ pub enum ExecuteMsg {
     BeforeTrade {},
 }
 ```
-
-```javascript
-{
-  "before_trade": {
-  }
-}
-```
-
-| Key | Type | Description |
-| :--- | :--- | :--- |
-|  |  |  |
 
 ### SetVault
 
@@ -102,14 +73,6 @@ pub enum ExecuteMsg {
 }
 ```
 
-```javascript
-{
-  "set_vault": {
-    "vault_address": "terra1..."
-  }
-}
-```
-
 ## QueryMsg
 
 ### `LastBalance`
@@ -124,11 +87,6 @@ pub enum QueryMsg {
 }
 ```
 
-```javascript
-{
-  "last_balance": {} 
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -143,13 +101,7 @@ pub struct LastBalanceResponse {
 }
 ```
 
-```javascript
-{
-  "last_balance_response": {
-    "last_balance": "10000000"
-  }
-}
-```
+
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -167,11 +119,6 @@ pub enum QueryMsg {
 }
 ```
 
-```javascript
-{
-  "last_profit": {} 
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -186,13 +133,6 @@ pub struct LastProfitResponse {
 }
 ```
 
-```javascript
-{
-  "last_profit_response": {
-    "last_profit": "10000000"
-  }
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -210,11 +150,7 @@ pub enum QueryMsg {
 }
 ```
 
-```javascript
-{
-  "vault": {} 
-}
-```
+
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -229,13 +165,7 @@ pub struct VaultResponse {
 }
 ```
 
-```javascript
-{
-  "vault_response": {
-    "vault_address": "terra1..."
-  }
-}
-```
+
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
