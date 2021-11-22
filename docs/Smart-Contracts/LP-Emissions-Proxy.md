@@ -19,116 +19,106 @@ This proxy contract handles staking the provided LP tokens to our own LP emissio
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {
-    pub vault_address: String,
-    pub seignorage_address: String,
-    pub pool_address: String,
-    pub asset_info: AssetInfo,
+    pub generator_contract_addr: String,
+    pub pair_addr: String,
+    pub lp_token_addr: String,
+    pub reward_contract_addr: String,
+    pub reward_token_addr: String,
 }
 ```
 
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
-| `vault_address` | String | Contract address of Anchor Money Market system. This is used for depositing and withdrawing from Anchor |
-| `seignorage_address` | String | Contract address of aUST token |
-| `pool_address` | String | Contract address of Profit Check Contract |
-| `warchest_address` | String | Contract address of Profit Check Contract |
-| `asset_info` | AssetInfo | Struct detailing the token to be used for trading (the vault base token) |
+| `generator_contract_addr` | String | Address of generator contract |
+| `pair_addr` | String | Address of the WHALE/UST pair |
+| `lp_token_addr` | String | Address of the WHALE/UST LP token |
+| `reward_contract_addr` | String | Address of the LP emissions contract |
+| `reward_token_addr` | String | Whale token address |
 
 
 ## ExecuteMsg
 
-### `ExecuteArb`
+### Receive
 
-Endpoint for the arbitrage bot to call. The arb bot provides the arb details and direction to the contract. These details are determined by the arbitrage bots.
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum HandleMsg {
-    ExecuteArb {
-        details: ArbDetails,
-        above_peg: bool,
-    }
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct ArbDetails {
-    pub asset: Asset,
-    pub slippage: Decimal,
-    pub belief_price: Decimal,
-}
-
-```
-
-
-
-| Key | Type | Description |
-| :--- | :--- | :--- |
-| `details` | ArbDetails | Conveys the amount, max allowed slippage and belief price |
-| `above_peg` | bool | Conveys if UST is below or above peg |
-
-### AbovePegCallback
-
-After the stablecoin vault transfered the requested funds to this contract it will call the provided callback message. The AbovePegCallback and BelowPegCallback messages are both callback endpoints for the stablecoin vault. This endpoint can only be call by the vault.
+Receives LP tokens sent by Generator contract. Further sends them to the $WHALE LP Staking contract
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    AbovePegCallback {
-        details: ArbDetails,
+        Recieve(Cw20ReceiveMsg),
+}
+```
+
+### UpdateRewards
+
+Claims pending rewards from the $WHALE LP staking contract
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+        UpdateRewards {},
+}
+```
+
+### SendRewards
+
+Transfers $WHALE rewards
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    SendRewards { 
+        account: Addr, 
+        amount: Uint128 
     },
 }
 
 ```
 
-```javascript WIP
-{
-  
-}
-```
-
 | Key | Type | Description |
 | :--- | :--- | :--- |
-| `details` | ArbDetails | Conveys the amount, max allowed slippage and belief price |
+| `account` | Addr | Address of the LP staker |
+| `amount` | Uint128 | Amount of reward tokens to transfer |
 
-### BelowPegCallback
 
-After the stablecoin vault transfered the requested funds to this contract it will call the provided callback message. The AbovePegCallback and BelowPegCallback messages are both callback endpoints for the stablecoin vault. This endpoint can only be call by the vault.
+### Withdraw
+
+Withdraws LP Tokens from the staking contract. Rewards are NOT claimed when withdrawing LP tokens
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    AbovePegCallback {
-        details: ArbDetails,
+    Withdraw { 
+        account: Addr, 
+        amount: Uint128 
     },
 }
 
 ```
 
-```javascript WIP
-{
-  
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
-| `details` | ArbDetails | Conveys the amount, max allowed slippage and belief price |
+| `account` | Addr | Address of the LP staker |
+| `amount` | Uint128 | Amount of reward tokens to transfer |
 
-### SetAdmin
+### EmergencyWithdraw
 
-Change the established Admin for the Stablecoin Vault. Can only be called by the currently established Admin of the contract.
+Withdraws LP Tokens from the staking contract. Rewards are NOT claimed when withdrawing LP tokens. Uses same withdraw function internally.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    SetAdmin {
-        admin: Addr
-    }
+    EmergencyWithdraw { 
+        account: Addr, 
+        amount: Uint128 
+    },
 }
 ```
 
@@ -136,36 +126,55 @@ pub enum ExecuteMsg {
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
-| `admin` | Addr | Address of the new Admin. |
-
-## Callbacks
-
-These callbacks can only be called by the contract itself. No external address is allowed to execute these endpoints.
-
-### `AfterSuccessfulTradeCallback`
-
-After a successful trade, which means the trade was able to execute given the slippage constraints, it sends all the available UST back to the stablecoin vault contract. 
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum CallbackMsg {
-    AfterSuccessfulTradeCallback {},
-}
-```
-
-
+| `account` | Addr | Address of the LP staker |
+| `amount` | Uint128 | Amount of reward tokens to transfer |
 
 ## QueryMsg
 
-### `Config`
+### `Deposit`
 
-Gets the configuration for the arbitrage contract.
+Gets the bonded amount of LP tokens
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
-    Config {} 
+    Deposit {} 
+}
+```
+
+### `Reward`
+
+Returns the amount of WHALE held by this contract.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum QueryMsg {
+    Reward {} 
+}
+```
+
+### `PendingToken`
+
+Returns the claimable amount of WHALE.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum QueryMsg {
+    PendingToken {} 
+}
+```
+
+### `RewardInfo`
+
+Return the WHALE token address.
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum QueryMsg {
+    RewardInfo {} 
 }
 ```

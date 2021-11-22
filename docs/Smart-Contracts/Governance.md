@@ -60,7 +60,7 @@ pub struct InstantiateMsg {
 | `proposal_deposit` | Uint128 | Minimum WHALE deposit required for submitting a new poll |
 | `snapshot_period` | u64 | Window of time \(number of blocks\) allowed for poll snapshot before a poll's end **\[blocks\]** |
 
-## HandleMsg
+## ExecuteMsg
 
 ### `Receive`
 
@@ -69,7 +69,7 @@ Can be called during a CW20 token transfer when the Gov contract is the recipien
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum HandleMsg {
+pub enum ExecuteMsg {
     Receive {
         amount: Uint128,
         sender: HumanAddr,
@@ -104,7 +104,7 @@ Registers the contract addresses \(i.e. Whale Token, WHALE\) to Gov.
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum HandleMsg {
+pub enum ExecuteMsg {
     RegisterContracts {
         whale_token: HumanAddr, 
     }
@@ -132,7 +132,7 @@ Updates the configuration of the Gov contract.
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum HandleMsg {
+pub enum ExecuteMsg {
     UpdateConfig {
         owner: Option<HumanAddr>, 
         quorum: Option<Decimal>, 
@@ -181,7 +181,7 @@ Submits a user's vote for an active poll. Once a user has voted, they cannot cha
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum HandleMsg {
+pub enum ExecuteMsg {
     CastVote {
         poll_id: u64, 
         vote: VoteOption, 
@@ -222,7 +222,7 @@ Removes specified amount of staked WHALE tokens from a staking position and retu
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum HandleMsg {
+pub enum ExecuteMsg {
     WithdrawVotingTokens {
         amount: Option<Uint128>, 
     }
@@ -250,7 +250,7 @@ Can be issued by anyone to end the voting for an active poll. Triggers tally the
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum HandleMsg {
+pub enum ExecuteMsg {
     EndPoll {
         poll_id: u64, 
     }
@@ -277,7 +277,7 @@ Can be issued by anyone to implement into action the contents of a passed poll. 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum HandleMsg {
+pub enum ExecuteMsg {
     ExecutePoll {
         poll_id: u64, 
     }
@@ -303,7 +303,7 @@ Can be issued by anyone to expire a poll. Requires the poll to be neither be a t
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum HandleMsg {
+pub enum ExecuteMsg {
     ExpirePoll {
         poll_id: u64, 
     }
@@ -329,7 +329,7 @@ Snapshots the total amount of staked WHALE and stores the number to the specifie
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum HandleMsg {
+pub enum ExecuteMsg {
     SnapshotPoll {
         poll_id: u64, 
     }

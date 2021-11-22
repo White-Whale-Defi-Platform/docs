@@ -53,7 +53,7 @@ Can be called during a CW20 token transfer when tokens are deposited into the St
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum HandleMsg {
+pub enum ExecuteMsg {
     Receive {
         amount: Uint128,
         sender: HumanAddr,
