@@ -1,4 +1,4 @@
-# Terraswap Wrapper
+# Terraswap
 
 Wrapper contract which implements a method to interact with a liquidity pool. The contract can be used as the basis to implement protocol owned liquidity
 
@@ -112,7 +112,7 @@ pub enum ExecuteMsg {
 
 ### SetTrader
 
-Update the address of the nominated trader. Can only be called by Admin.
+Updates the address of the nominated trader. Can only be called by Admin.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -138,7 +138,7 @@ pub enum ExecuteMsg {
 
 ### SetMaxDeposit
 
-Update the configured Max Deposit value. Can only be called by Admin.
+Updates the configured Max Deposit value. Can only be called by Admin.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -167,7 +167,7 @@ pub enum ExecuteMsg {
 
 ### SetMinDeposit
 
-Update the configured Min Profit value. Can only be called by Admin.
+Updates the configured Min Profit value. Can only be called by Admin.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
