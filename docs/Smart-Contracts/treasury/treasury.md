@@ -7,26 +7,20 @@ It is controlled by the governance contract and serves to grow its holdings and 
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| `whale_token_addr` | CanonicalAddr | Contract address of Whale Token |
+|  |  |  |
 
 ## InstantiateMsg
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {
-    pub whale_token_addr: String,
 }
 ```
 
-```javascript
-{
-  "whale_token_addr": "terra1...", 
-}
-```
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| `whale_token_addr` | CanonicalAddr | Contract address of Whale Token |
+|  |  |  |
 
 ## ExecuteMsg
 
@@ -197,19 +191,19 @@ pub enum QueryMsg {
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct ConfigResponse {
-    pub token_addr: Addr,
+    pub traders: Vec<String>,
 }
 ```
 
 ```javascript
 {
-  "token_addr": "terra1...", 
+  "traders": [], 
 }
 ```
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| `token_addr` | CanonicalAddr | Contract address of Whale Token |
+| `traders` | Vec<String> | Vec containing a list of registered traders |
 
 ### `TotalValue`
 
@@ -240,7 +234,7 @@ tbd
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema, Debug)]
 pub struct ValueResponse {
-    
+    value: Uint128
 }
 ```
 
@@ -286,13 +280,13 @@ tbd
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema, Debug)]
 pub struct HoldingValueResponse {
-    
+    value: Uint128
 }
 ```
 
 ```javascript
 {
-  "admin": "terra1...", 
+  "value": "...", 
 }
 ```
 
@@ -309,6 +303,7 @@ Returns the registered Assets of the treasury vault.
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
     VaultAssetConfig {
+        identifier: String
     }
 }
 ```
@@ -337,7 +332,6 @@ pub struct VaultAssetConfigResponse {
 
 ```javascript
 {
-  "admin": "terra1...", 
 }
 ```
 
