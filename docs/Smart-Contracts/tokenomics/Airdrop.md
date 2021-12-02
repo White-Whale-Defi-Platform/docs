@@ -137,7 +137,7 @@ pub enum QueryMsg {
 
 ### `HasUserClaimed`
 
-Return the WHALE token address.
+Return whether or not a given address has claimed.
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
