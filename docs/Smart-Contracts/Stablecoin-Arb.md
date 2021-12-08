@@ -42,7 +42,7 @@ Endpoint for the arbitrage bot to call. The arb bot provides the arb details and
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum HandleMsg {
+pub enum ExecuteMsg {
     ExecuteArb {
         details: ArbDetails,
         above_peg: bool,
