@@ -7,7 +7,7 @@ This dapps config is composed of two state objects. A `BaseState` which every da
 
 ### BaseState
 
-See dapp base
+See [Dapp Base](Dapp-Base.md)
 
 ### State
 
@@ -56,7 +56,8 @@ pub fn execute(deps: DepsMut, env: Env, info: MessageInfo, msg: ExecuteMsg) -> V
 
 ### `Base`
 
-See dapp-base
+See `handle_base_message` in [Dapp Base](Dapp-Base.md)
+
 
 ### `Receive`
 
@@ -177,7 +178,7 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
 
 ### `Base`
 
-See dapp-base
+See `handle_base_query` in [Dapp Base](Dapp-Base.md)
 
 ###  `State`
 
