@@ -46,6 +46,43 @@ pub struct InstantiateMsg {
 
 ## ExecuteMsg
 
+```rust 
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    Receive(Cw20ReceiveMsg),
+    ProvideLiquidity {
+        asset: Asset,
+    },
+    SetStableCap {
+        stable_cap: Uint128,
+    },
+    SetFee {
+        flash_loan_fee: Option<Fee>,
+        warchest_fee: Option<Fee>,
+    },
+    SetAdmin {
+        admin: String,
+    },
+    AddToWhitelist {
+        contract_addr: String,
+    },
+    RemoveFromWhitelist {
+        contract_addr: String,
+    },
+    UpdateState {
+        anchor_money_market_address: Option<String>,
+        aust_address: Option<String>,
+        profit_check_address: Option<String>,
+        allow_non_whitelisted: Option<bool>,
+    },
+    FlashLoan {
+        payload: FlashLoanPayload,
+    },
+    Callback(CallbackMsg),
+}
+```
+
 ### `Receive`
 
 Can be called during a CW20 token transfer when tokens are deposited into the Stablecoin Vault. Allows the token transfer to execute a [Receive Hook](Stablecoin-Vault.md#receive-hooks) as a subsequent action within the same transaction.
@@ -76,27 +113,22 @@ Attempt to get a flashloan from the vault. The requested funds and callback mess
 
 If needed, funds are withdrawn from anchor. All incured fees are paid by the borrower. Two calls to the profit_check contract surround the flashloan callback msg to ensure the trade only finalizes if the contract makes a profit.
 
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    FlashLoan {
-        payload: FlashLoanPayload,
-    },
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct FlashLoanPayload {
-    pub requested_asset: Asset,
-    pub callback: Binary,
-}
-```
-
-
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `requested_asset` | Asset | Requested asset, contains amount an assetinfo |
 | `callback` | Binary | The encoded callback msg provided by the calling contract |
+
+```javascript
+{
+  "requested_asset": {
+      "info": {
+          "denom": "uusd"
+      }
+      "amount": "1000000"
+  }, 
+  "callback": "<binary>", 
+}
+```
 
 
 ### ProvideLiquidity
@@ -106,34 +138,27 @@ In the event of a successful deposit, the address will receive newly minted LP t
 
 This function should be called alongside a deposit of UST into the contract.
 
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    ProvideLiquidity {
-        asset: Asset
-    }
-}
-```
-
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `asset` | Asset | Asset to be provided as liquidity. Includes asset info and amount. |
 
+```json 
+{
+    "provide_liquidity": {
+        "asset": {
+            "info": {
+                "native_token": { "denom": "uusd" },
+            },
+            "amount": "1000000",
+        }
+}
+```
+
 ### SetStableCap
 
 Change the UST_CAP parameter for the Stablecoin Vault which represents the cap of liquid UST kept in the vault. Deposits in excess of the cap will be deposited into anchor. Can only be called by the established Admin of the contract.
 
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    SetStableCap {
-        stable_cap: Uint128
-    }
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -143,16 +168,6 @@ pub enum ExecuteMsg {
 
 Change the established Admin for the Stablecoin Vault. Can only be called by the currently established Admin of the contract.
 
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    SetAdmin {
-        admin: Addr
-    }
-}
-```
-
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `admin` | Addr | Address of the new Admin. |
@@ -160,16 +175,6 @@ pub enum ExecuteMsg {
 ### AddToWhitelist
 
 Adds the provided address to the whitelist. Can only be called by Admin.
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    AddToWhitelist {
-        contracts_addr: Addr
-    }
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -179,16 +184,6 @@ pub enum ExecuteMsg {
 
 Removes the provided address from the whitelist. Can only be called by Admin.
 
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    RemoveFromWhitelist {
-        contracts_addr: Addr
-    }
-}
-```
-
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -197,17 +192,6 @@ pub enum ExecuteMsg {
 ### SetFee
 
 Update the fee information for 1 or more of the associated fee structures. Can only be called by Admin.
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    SetFee{
-        flash_loan_fee: Option<Fee>,
-        warchest_fee: Option<Fee>,
-    }
-}
-```
 
 
 | Key | Type | Description |
@@ -220,20 +204,6 @@ pub enum ExecuteMsg {
 ### UpdateState
 
 Update the state of the contract with the provided arguments.
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    UpdateState {
-        anchor_money_market_address: Option<String>,
-        aust_address: Option<String>,
-        profit_check_address: Option<String>,
-        allow_non_whitelisted: Option<bool>,
-    }
-}
-```
-
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
@@ -278,6 +248,22 @@ pub enum CallbackMsg {
 ```
 
 ## QueryMsg
+
+```rust
+#[cfg_attr(not(feature = "library"), entry_point)]
+pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
+    match msg {
+        QueryMsg::PoolConfig {} => to_binary(&try_query_config(deps)?),
+        QueryMsg::PoolState {} => to_binary(&try_query_pool_state(deps)?),
+        QueryMsg::State {} => to_binary(&try_query_state(deps)?),
+        QueryMsg::Fees {} => to_binary(&query_fees(deps)?),
+        QueryMsg::VaultValue {} => to_binary(&query_total_value(deps)?),
+        QueryMsg::EstimateWithdrawFee { amount } => {
+            to_binary(&estimate_withdraw_fee(deps, amount)?)
+        }
+    }
+}
+```
 
 
 ### `State`
@@ -367,15 +353,6 @@ pub struct PoolResponse {
 ### `Fees`
 
 Gets the fees structure set by the Stablecoin Vault contract.
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum QueryMsg {
-    Fees {} 
-}
-```
-
 ### `FeeResponse`
 
 ```rust
@@ -386,15 +363,6 @@ pub struct FeeResponse {
 
 ### `VaultFee`
 
-```rust
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct VaultFee {
-    pub flash_loan_fee: Fee,
-    pub warchest_fee: Fee,
-    pub warchest_addr: CanonicalAddr
-}
-```
-
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `flash_loan_fee` | Fee | Flashloan fee expected to be paid by non-whitelisted contracts |
@@ -404,14 +372,6 @@ pub struct VaultFee {
 ### `EstimateWithdrawFee`
 
 Query to provide an estimate of the Stablecoin Vault withdrawal fee minus tax.
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum QueryMsg {
-    EstimateWithdrawFee{ amount: Uint128 }
-}
-```
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
