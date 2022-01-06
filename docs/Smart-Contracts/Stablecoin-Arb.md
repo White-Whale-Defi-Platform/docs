@@ -29,7 +29,7 @@ pub struct InstantiateMsg {
 | `vault_address` | String | Contract address of Anchor Money Market system. This is used for depositing and withdrawing from Anchor |
 | `seignorage_address` | String | Contract address of aUST token |
 | `pool_address` | String | Contract address of Profit Check Contract |
-| `warchest_address` | String | Contract address of Profit Check Contract |
+| `treasury_address` | String | Contract address of Profit Check Contract |
 | `asset_info` | AssetInfo | Struct detailing the token to be used for trading (the vault base token) |
 
 
@@ -102,7 +102,7 @@ pub enum ExecuteMsg {
 | :--- | :--- | :--- |
 | `details` | ArbDetails | Conveys the amount, max allowed slippage and belief price |
 
-### SendWarchestCommission
+### SendTreasuryCommission
 
 Call executed by the profit check contract after a profitable trade. It forwards a portion of the profit to the treasury contract (aka war chest). The % of the profit sent as commission is set by the commission_fee. 
 
@@ -110,7 +110,7 @@ Call executed by the profit check contract after a profitable trade. It forwards
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    SendWarchestCommission { 
+    SendTreasuryCommission { 
         profit: Uint128 
     },
 }

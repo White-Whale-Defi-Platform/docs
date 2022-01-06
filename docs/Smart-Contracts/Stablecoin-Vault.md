@@ -20,10 +20,10 @@ pub struct InstantiateMsg {
     pub anchor_money_market_address: String,
     pub aust_address: String,
     pub profit_check_address: String,
-    pub warchest_addr: String,
+    pub treasury_addr: String,
     pub asset_info: AssetInfo,
     pub token_code_id: u64,
-    pub warchest_fee: Decimal,
+    pub treasury_fee: Decimal,
     pub flash_loan_fee: Decimal,
     pub commission_fee: Decimal,
     pub stable_cap: Uint128,
@@ -37,10 +37,10 @@ pub struct InstantiateMsg {
 | `anchor_money_market_address` | String | Contract address of Anchor Money Market system. This is used for depositing and withdrawing from Anchor |
 | `aust_address` | String | Contract address of aUST token |
 | `profit_check_address` | String | Contract address of Profit Check Contract |
-| `warchest_address` | String | Contract address of Profit Check Contract |
+| `treasury_address` | String | Contract address of Profit Check Contract |
 | `asset_info` | AssetInfo | Struct detailing the token to be used for trading (the vault base token) |
 | `token_code_id` | u64 | The Stored Code Object ID for the LP token creator. This is used on instantiation to creation an LP token when the Vault is created |
-| `warchest_fee` | Decimal | Configurable fee rate for the warchest contract. |
+| `treasury_fee` | Decimal | Configurable fee rate for the treasury contract. |
 | `commission_fee` | Decimal | Fee on every profitable action on the vault, sent to the treasury. |
 | `stable_cap` | Uint128 | Initial UST_CAP value which represents the amount of liquid UST kept outside of Anchor |
 | `vault_lp_token_name` | Uint128 | Absolute max rate for community fund |
@@ -61,7 +61,7 @@ pub enum ExecuteMsg {
     },
     SetFee {
         flash_loan_fee: Option<Fee>,
-        warchest_fee: Option<Fee>,
+        treasury_fee: Option<Fee>,
         commission_fee: Option<Fee>
     },
     SetAdmin {
@@ -200,7 +200,7 @@ Update the fee information for 1 or more of the associated fee structures. Can o
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `flash_loan_fee`\* | Fee | New fee value for fees associated with non-whitelisted flashloans |
-| `warchest_fee`\* | Fee | New fee values for fee allocation to the Warchest |
+| `treasury_fee`\* | Fee | New fee values for fee allocation to the Treasury |
 
 \* = optional
 
@@ -223,7 +223,7 @@ Payable functions when you send a payment to the contract with an appropriate me
 
 ### `WithdrawLiquidity`
 
-Attempt to withdraw deposits. Fees are calculated and deducted. If the Vault has available funds in Anchor it will attempt to payout the withdrawal request by first withdrawing some funds from Anchor to fund the withdrawal request. Luna holdings are not eligible for withdrawal. LP tokens submitted with a withdrawal request will be burned. The Warchest withdraw fee is paid out by transfering ownership of a fraction of the LP tokens to the warchest contract. 
+Attempt to withdraw deposits. Fees are calculated and deducted. If the Vault has available funds in Anchor it will attempt to payout the withdrawal request by first withdrawing some funds from Anchor to fund the withdrawal request. Luna holdings are not eligible for withdrawal. LP tokens submitted with a withdrawal request will be burned. The Treasury withdraw fee is paid out by transfering ownership of a fraction of the LP tokens to the treasury contract. 
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -369,8 +369,8 @@ pub struct FeeResponse {
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `flash_loan_fee` | Fee | Flashloan fee expected to be paid by non-whitelisted contracts |
-| `warchest_fee` | Fee | Fee information related to Warchest fee distribution. |
-| `warchest_addr` | CanonicalAddr | Address of the Community Fund Contract |
+| `treasury_fee` | Fee | Fee information related to Treasury fee distribution. |
+| `treasury_addr` | CanonicalAddr | Address of the Community Fund Contract |
 
 ### `EstimateWithdrawFee`
 
