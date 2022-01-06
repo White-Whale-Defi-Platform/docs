@@ -56,7 +56,7 @@ pub fn execute(deps: DepsMut, env: Env, info: MessageInfo, msg: ExecuteMsg) -> V
 
 ### `Base`
 
-See `handle_base_message` in [Dapp Base](Dapp-Base.md)
+See `handle_base_message` in [Dapp Base](../Dapp-Base/#handle_base_message)
 
 
 ### `Receive`
@@ -178,7 +178,7 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
 
 ### `Base`
 
-See `handle_base_query` in [Dapp Base](Dapp-Base.md)
+See `handle_base_query` in [Dapp Base](../Dapp-Base/#handle_base_query)
 
 ###  `State`
 
