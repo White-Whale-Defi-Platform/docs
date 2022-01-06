@@ -1,7 +1,6 @@
 # Treasury
 
-The treasury behaves similarly to a community fund with the proviso that funds in the treasury are used to provide staking rewards to stakers.
-It is controlled by the governance contract and serves to grow its holdings and become a safeguard/protective measure in keeping the peg.
+The Treasury contract is the holder of the Protocol Owned Liquidity and is able to maintain a series of registered helper smart contracts, we call 'dapps' to prepare messages for various operations the treasury will execute.
 
 ## Config
 
@@ -31,15 +30,6 @@ Updates the Community fund contract admin.
 > Note: The AdminResponse object is imported from the `cw_controllers` package. This definition may change
 > as that package is updated
 
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    SetAdmin {
-        admin: String, 
-    }
-}
-```
 
 ```javascript
 {
@@ -53,74 +43,42 @@ pub enum ExecuteMsg {
 | :--- | :--- | :--- |
 | `admin` | String | Address of the new contract admin |
 
-### `AddTrader`
+### `AddDapp`
 
-Registers a contract address as a registered Trader
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    AddTrader {
-        trader: String, 
-    }
-}
-```
+Registers a contract address as a registered Dapp
 
 ```javascript
 {
-  "add_trader": {
-    "trader": "terra1..." 
+  "add_dapp": {
+    "dapp": "terra1..." 
   }
 }
 ```
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| `trader` | String | Address of the account to register as a trader |
+| `dapp` | String | Address of the dapp to register. |
 
-### `RemoveTrader`
+### `RemoveDapp`
 
-Updates the Community fund contract admin.
+Deregistered an already registered Dapp using its contract address.
 
-> Note: The AdminResponse object is imported from the `cw_controllers` package. This definition may change
-> as that package is updated
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    RemoveTrader {
-        trader: String, 
-    }
-}
-```
 
 ```javascript
 {
-  "remove_trader": {
-    "trader": "terra1..." 
+  "remove_dapp": {
+    "dapp": "terra1..." 
   }
 }
 ```
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| `trader` | String | Address of the registered trader to remove |
+| `dapp` | String | Address of the registered dapp to remove |
 
-### `TraderAction`
+### `DappAction`
 
-Take one or more `msgs` as a vec and then attempt to execute these actions on behalf of a whitelisted addr
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    TraderAction {
-        msgs: Vec<CosmosMsh<Empty>>, 
-    }
-}
-```
+Take one or more `msgs` as a vec and then attempt to execute these actions on behalf of a whitelisted address.
 
 ```javascript
 {
@@ -132,28 +90,19 @@ pub enum ExecuteMsg {
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| `msg` | Vec<CosmosMsh<Empty>> | Vector of msgs to be executed |
+| `msg` | Vec<CosmosMsg<Empty>> | Vector of msgs to be executed |
 
 ### `UpdateAssets`
 
-Update the stored asset information for the treasury
+Update the stored asset information for the treasury. Attempt to add and/or remove 1 or more Asset types from the memory contract. This call can be used to store Assets which will be used by the Dapp such as storing a custom CW20 including its address ready for later use.
 
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    UpdateAssets {
-        to_add: Vec<VaultAsset>,
-        to_remove: Vec<AssetInfo>,
-    }
-}
-```
 
-```javascript
+```json
 {
-  "trader_action": {
-    "msgs": []
-  }
+    "update_assets": {
+        "to_add": [{"asset":{}, "value_reference": null}],
+        "to_remove": [{"denom":"uusd"}]
+    }
 }
 ```
 
@@ -167,14 +116,6 @@ pub enum ExecuteMsg {
 ### `Config`
 
 Gets the Treasury contract configuration.
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum QueryMsg {
-    Config {}
-}
-```
 
 ```javascript
 {
@@ -209,14 +150,6 @@ pub struct ConfigResponse {
 
 Gets the total value of assets in the Treasury.
 
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum QueryMsg {
-    TotalValue {}
-}
-```
-
 ```javascript
 {
   "total_value": {}
@@ -250,16 +183,6 @@ pub struct ValueResponse {
 ### `HoldingValue`
 
 Computes and returns the value of a specified asset that is held by the vault.
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum QueryMsg {
-    HoldingValue {
-        identifier: String
-    }
-}
-```
 
 ```javascript
 {
@@ -297,16 +220,6 @@ pub struct HoldingValueResponse {
 ### `VaultAssetConfig`
 
 Returns the registered Assets of the treasury vault.
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum QueryMsg {
-    VaultAssetConfig {
-        identifier: String
-    }
-}
-```
 
 ```javascript
 {
