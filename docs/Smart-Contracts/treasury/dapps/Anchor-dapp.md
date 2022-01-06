@@ -17,12 +17,8 @@ See [Dapp Base](Dapp-Base.md)
 
 ## InstantiateMsg
 
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct InstantiateMsg {
-    pub base: BaseInstantiateMsg,
-}
-```
+See [Dapp BaseInstantiateMsg](../Dapp-Base/#instantiatemsg)
+
 
 ## ExecuteMsg
 
