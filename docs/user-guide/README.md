@@ -1,16 +1,10 @@
 # WebApp
 
-**The White Whale WebApp is the official web frontend for interacting with White Whale Protocol on the Terra network. The WebApp can be accessed at** [**https://app.whitewhale.finance**](https://app.whitewhale.finance/)**.**
+**The White Whale WebApp is the official web frontend for interacting with White Whale Protocol on the Terra network. The WebApp can be accessed at** [**https://app.whitewhale.money**](https://app.whitewhale.money/)**.**
 
-The **White Whale WebApp** offers a graphical user interface for accessing White Whale's core user operations, such as depositing & redeeming Terra stablecoins into vaults for arbitrage, swapping for Whale tokens, depositing Terra based tokens to be used for the purposea of maintaining the peg in terms of market turmoil, and participating in White Whale governance.
+The **White Whale WebApp** offers a graphical user interface for accessing White Whale's core user operations, such as interacting with the vaults, swapping Whale tokens and participating in White Whale governance.
 
-White Whale will launch with 4 initial components: The Arb Vaults, the Governance
-Vault, The Burn Vault, and the War Chest. Users will deposit UST only into the Arb
-
-Vault. All 4 components will leverage Anchor Protocol to optimize capital efficien-
-cy and investor return, and all 4 components will consistently and sustainably buy
-
-WHALE tokens either for burning or distribution.
+White Whale will launch with 3 initial components: The Arb Vaults, Governance and the Treasury. 
 
 {% hint style="warning" %}
 The White Whale web app requires [Google Chrome](https://www.google.com/chrome/) and [Station Extension](https://chrome.google.com/webstore/detail/terra-station/aiifbnbfobpmeekipheeijimdpnlpgpp) to be installed. Please follow the instructions below to set up your browser to be able to access the WebApp.

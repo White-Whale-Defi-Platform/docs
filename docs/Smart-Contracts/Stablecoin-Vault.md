@@ -25,6 +25,7 @@ pub struct InstantiateMsg {
     pub token_code_id: u64,
     pub warchest_fee: Decimal,
     pub flash_loan_fee: Decimal,
+    pub commission_fee: Decimal,
     pub stable_cap: Uint128,
     pub vault_lp_token_name: Option<String>,
     pub vault_lp_token_symbol: Option<String>,
@@ -40,6 +41,7 @@ pub struct InstantiateMsg {
 | `asset_info` | AssetInfo | Struct detailing the token to be used for trading (the vault base token) |
 | `token_code_id` | u64 | The Stored Code Object ID for the LP token creator. This is used on instantiation to creation an LP token when the Vault is created |
 | `warchest_fee` | Decimal | Configurable fee rate for the warchest contract. |
+| `commission_fee` | Decimal | Fee on every profitable action on the vault, sent to the treasury. |
 | `stable_cap` | Uint128 | Initial UST_CAP value which represents the amount of liquid UST kept outside of Anchor |
 | `vault_lp_token_name` | Uint128 | Absolute max rate for community fund |
 | `vault_lp_token_symbol` | Uint128 | Absolute max rate for community fund |
@@ -60,6 +62,7 @@ pub enum ExecuteMsg {
     SetFee {
         flash_loan_fee: Option<Fee>,
         warchest_fee: Option<Fee>,
+        commission_fee: Option<Fee>
     },
     SetAdmin {
         admin: String,

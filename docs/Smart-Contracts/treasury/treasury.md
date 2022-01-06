@@ -1,6 +1,8 @@
 # Treasury
 
-The Treasury contract is the holder of the Protocol Owned Liquidity and is able to maintain a series of registered helper smart contracts, we call 'dapps' to prepare messages for various operations the treasury will execute.
+The Treasury contract is the holder of the Protocol Owned Liquidity and is able to maintain a series of registered helper smart contracts, which we call 'dapps', to prepare messages for various operations. Only whitelisted addresses are able to forward messages for execution.
+
+The treasury also has internal value calculation logic. This logic is enable by the VaultAsset class in which each VaultAsset, apart from the base reference (UST for example), has a value reference (ValueRef). The value reference provides a way to calculate the value of the asset held in the treasury given a correct configuration.   
 
 ## Config
 
@@ -23,9 +25,27 @@ pub struct InstantiateMsg {
 
 ## ExecuteMsg
 
+```rust
+pub enum ExecuteMsg {
+    /// Sets the admin
+    SetAdmin { admin: String },
+    /// Executes the provided messages if sender is whitelisted
+    DAppAction { msgs: Vec<CosmosMsg<Empty>> },
+    /// Adds the provided address to whitelisted dapps
+    AddDApp { dapp: String },
+    /// Removes the provided address from the whitelisted dapps
+    RemoveDApp { dapp: String },
+    /// Updates the VAULT_ASSETS map
+    UpdateAssets {
+        to_add: Vec<VaultAsset>,
+        to_remove: Vec<AssetInfo>,
+    },
+}
+```
+
 ### `SetAdmin`
 
-Updates the Community fund contract admin.
+Updates the Treasury contract admin.
 
 > Note: The AdminResponse object is imported from the `cw_controllers` package. This definition may change
 > as that package is updated
@@ -33,7 +53,7 @@ Updates the Community fund contract admin.
 
 ```javascript
 {
-  "update_admin": {
+  "set_admin": {
     "admin": "terra1..." 
   }
 }
@@ -43,13 +63,13 @@ Updates the Community fund contract admin.
 | :--- | :--- | :--- |
 | `admin` | String | Address of the new contract admin |
 
-### `AddDapp`
+### `AddDApp`
 
 Registers a contract address as a registered Dapp
 
 ```javascript
 {
-  "add_dapp": {
+  "add_d_app": {
     "dapp": "terra1..." 
   }
 }
@@ -59,14 +79,14 @@ Registers a contract address as a registered Dapp
 | :--- | :--- | :--- |
 | `dapp` | String | Address of the dapp to register. |
 
-### `RemoveDapp`
+### `RemoveDApp`
 
 Deregistered an already registered Dapp using its contract address.
 
 
 ```javascript
 {
-  "remove_dapp": {
+  "remove_d_app": {
     "dapp": "terra1..." 
   }
 }
@@ -82,7 +102,7 @@ Take one or more `msgs` as a vec and then attempt to execute these actions on be
 
 ```javascript
 {
-  "trader_action": {
+  "d_app_action": {
     "msgs": []
   }
 }
@@ -90,17 +110,27 @@ Take one or more `msgs` as a vec and then attempt to execute these actions on be
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| `msg` | Vec<CosmosMsg<Empty>> | Vector of msgs to be executed |
+| `msg` | Vec[CosmosMsg[Empty]] | Vector of msgs to be executed |
 
 ### `UpdateAssets`
 
-Update the stored asset information for the treasury. Attempt to add and/or remove 1 or more Asset types from the memory contract. This call can be used to store Assets which will be used by the Dapp such as storing a custom CW20 including its address ready for later use.
+Update the stored asset information for the treasury. This information is only used to calculate the treasury holding value. 
 
 
 ```json
 {
     "update_assets": {
-        "to_add": [{"asset":{}, "value_reference": null}],
+        "to_add": [
+          {"asset":{
+            "info": {
+              "native_token":
+              {"denom": "uusd"}
+            },
+            "amount": "0"
+            }, 
+            "value_reference": null
+          }
+        ],
         "to_remove": [{"denom":"uusd"}]
     }
 }
@@ -108,14 +138,29 @@ Update the stored asset information for the treasury. Attempt to add and/or remo
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| `to_add` | Vec<VaultAsset> | Vector of assets to be added |
-| `to_remove` | Vec<AssetInfo> | Vector of asset infos to be removed |
+| `to_add` | Vec[VaultAsset] | Vector of assets to be added |
+| `to_remove` | Vec[AssetInfo] | Vector of asset infos to be removed |
 
 ## QueryMsg
 
+```rust
+pub enum QueryMsg {
+    /// Returns the treasury Config
+    Config {},
+    /// Returns the total value of all held assets
+    TotalValue {},
+    /// Returns the value of one specific asset
+    HoldingValue { identifier: String },
+    /// Returns the amount of specified tokens this contract holds
+    HoldingAmount { identifier: String },
+    /// Returns the VAULT_ASSETS value for the specified key
+    VaultAssetConfig { identifier: String },
+}
+```
+
 ### `Config`
 
-Gets the Treasury contract configuration.
+Returns all the permissioned dapps
 
 ```javascript
 {
@@ -132,19 +177,19 @@ Gets the Treasury contract configuration.
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct ConfigResponse {
-    pub traders: Vec<String>,
+    pub dapps: Vec<String>,
 }
 ```
 
 ```javascript
 {
-  "traders": [], 
+  "dapps": [], 
 }
 ```
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| `traders` | Vec<String> | Vec containing a list of registered traders |
+| `dapps` | Vec<String> | Vec containing a list of registered dapps |
 
 ### `TotalValue`
 
@@ -160,13 +205,13 @@ Gets the total value of assets in the Treasury.
 | :--- | :--- | :--- |
 |  |  |  |
 
-### `ValueResponse`
+### `TotalValueResponse`
 
-tbd 
+
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema, Debug)]
-pub struct ValueResponse {
+pub struct TotalValueResponse {
     value: Uint128
 }
 ```
@@ -187,7 +232,7 @@ Computes and returns the value of a specified asset that is held by the vault.
 ```javascript
 {
   "holding_value": {
-      "identifier": ""
+      "identifier": "terra1dfs..."
   }
 }
 ```
@@ -198,7 +243,6 @@ Computes and returns the value of a specified asset that is held by the vault.
 
 ### `HoldingValueResponse`
 
-tbd 
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema, Debug)]
@@ -217,13 +261,14 @@ pub struct HoldingValueResponse {
 | :--- | :--- | :--- |
 |  |  |  |
 
-### `VaultAssetConfig`
+### `HoldingAmount`
 
-Returns the registered Assets of the treasury vault.
+Returns the amount of a specified asset that is held by the vault.
 
 ```javascript
 {
-  "vault_asset_config": {
+  "holding_value": {
+      "identifier": "terra1dfs..."
   }
 }
 ```
@@ -232,19 +277,15 @@ Returns the registered Assets of the treasury vault.
 | :--- | :--- | :--- |
 |  |  |  |
 
-### `VaultAssetConfigResponse`
+### `VaultAssetConfig`
 
-tbd 
-
-```rust
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema, Debug)]
-pub struct VaultAssetConfigResponse {
-    
-}
-```
+Returns the registered Assets of the treasury vault.
 
 ```javascript
 {
+  "vault_asset_config": {
+    "identifier": "terra1dfs..."
+  }
 }
 ```
 

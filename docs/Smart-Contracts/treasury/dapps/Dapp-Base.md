@@ -5,7 +5,7 @@
 
 ### `BaseState`
 
-The BaseState contains the main configurations such as addresses needed for sending and verifying messages
+The BaseState contains the main configurations such as addresses needed for sending messages and querying addresses
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]

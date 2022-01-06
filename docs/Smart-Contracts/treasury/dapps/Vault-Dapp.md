@@ -35,22 +35,21 @@ Available Execution operations on the Vault-Dapp:
 
 ```rust
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn execute(deps: DepsMut, env: Env, info: MessageInfo, msg: ExecuteMsg) -> VaultResult {
-    match msg {
-        ExecuteMsg::Base(message) => {
-            from_base_dapp_result(dapp_base_commands::handle_base_message(deps, info, message))
-        }
-        ExecuteMsg::Receive(msg) => commands::receive_cw20(deps, env, info, msg),
-        ExecuteMsg::ProvideLiquidity { asset } => {
-            commands::try_provide_liquidity(deps, info, asset, None)
-        }
-        ExecuteMsg::UpdatePool {
-            deposit_asset,
-            assets_to_add,
-            assets_to_remove,
-        } => commands::update_pool(deps, info, deposit_asset, assets_to_add, assets_to_remove),
-        ExecuteMsg::SetFee { fee } => commands::set_fee(deps, info, fee),
-    }
+pub enum ExecuteMsg {
+    Base(BaseExecuteMsg),
+    // Add dapp-specific messages here
+    Receive(Cw20ReceiveMsg),
+    ProvideLiquidity {
+        asset: Asset,
+    },
+    UpdatePool {
+        deposit_asset: Option<String>,
+        assets_to_add: Vec<String>,
+        assets_to_remove: Vec<String>,
+    },
+    SetFee {
+        fee: Fee,
+    },
 }
 ```
 
@@ -66,8 +65,8 @@ Can be called during a CW20 token transfer when tokens are deposited into the St
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    Receive {
+pub enum Receive {
+    Cw20ReceiveMsg {
         amount: Uint128,
         sender: HumanAddr,
         msg: Option<Binary>,
@@ -90,9 +89,7 @@ An abstraction around liquidity provision allowing a vault to have liquidity pro
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `asset` | Asset | Asset to be provided as liquidity. Includes asset info and amount. |
-| `sender`\* | Option<String> | Optionally, specify the provider of liquidity as a seperate address. Minted LP tokens will be sent to this address |
 
-\* = optional
 
 ```json 
 {
@@ -103,7 +100,6 @@ An abstraction around liquidity provision allowing a vault to have liquidity pro
             },
             "amount": "1000000",
         },
-        "sender": "terra1...."
 }
 ```
 
@@ -114,16 +110,18 @@ Update the vault's associated pool information and asset information.
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `deposit_asset`\* | Option<String> | New deposit asset to be used for the pool. |
-| `assets_to_add`\* | Vec<String> | A number of Assets to be to the pool |
-| `assets_to_remove`\* | Vec<String> | A number of Assets to be to the pool |
+| `assets_to_add`\* | Vec<String> | Assets to be included as claimable |
+| `assets_to_remove`\* | Vec<String> | Assets to be removed from being claimable |
 
 > Note: The 'assets' defined in this call use reference names which are stored in the memory contract rather than full asset information or contract addresses. See the Memory Contract for more
 
 ```json 
 {
-    "deposit_asset": "ust",
-    "assets_to_add": ["ust", "krw", "anotherone"],
-    "assets_to_add": ["eut"]
+    "update_pool": {
+        "deposit_asset": "ust",
+        "assets_to_add": ["ust", "krw", "anotherone"],
+        "assets_to_remove": ["bluna"]
+    }
 }
         
 ```
@@ -134,12 +132,14 @@ Update the configured fee information for the vault-dapp.
 
 | Key | Type | Description |
 | :--- | :--- | :--- |
-| `new_fee`\* | Fee | New fee information to set. |
+| `fee`\* | Fee | New fee information to set. |
 
 ```json 
 {
-    "new_fee": {
-        "share": 1.01
+    "set_fee": {
+        "fee": {
+            "share": 1.01
+        }
     }
 }
 ```
@@ -150,7 +150,7 @@ Payable functions when you send a payment to the contract with an appropriate me
 
 ### `WithdrawLiquidity`
 
-Attempt to withdraw deposits. Fees are calculated and deducted. If the Vault has available funds in Anchor it will attempt to payout the withdrawal request by first withdrawing some funds from Anchor to fund the withdrawal request. Luna holdings are not eligible for withdrawal. LP tokens submitted with a withdrawal request will be burned. The Warchest withdraw fee is paid out by transfering ownership of a fraction of the LP tokens to the warchest contract. 
+Attempt to withdraw deposits. Fees are calculated and deducted. LP tokens submitted with a withdrawal request are burned. The Treasury withdraw fee is paid out by transfering ownership of a fraction of the LP tokens to the treasury contract. 
 
 ```rust
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -163,16 +163,10 @@ pub enum Cw20HookMsg {
 ## QueryMsg
 
 ```rust
-#[cfg_attr(not(feature = "library"), entry_point)]
-pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
-    match msg {
-        QueryMsg::Base(message) => dapp_base_queries::handle_base_query(deps, message),
-        // handle dapp-specific queries here
-        QueryMsg::State {} => to_binary(&StateResponse {
-            liquidity_token: STATE.load(deps.storage)?.liquidity_token_addr.to_string(),
-        }),
-        QueryMsg::ValueQuery(query) => to_binary(&STATE.load(deps.storage)?), //queries::handle_value_query(deps, query),
-    }
+pub enum QueryMsg {
+    Base(BaseQueryMsg),
+    // Add dapp-specific queries here
+    State {},
 }
 ```
 
@@ -206,19 +200,4 @@ Saved dapp-specific configuration values.
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| `liquidity_token` | Addr | The contract address of the UST-Vault's LP token |
-
-
-### `VaultQuery`
-
-Perform a value query on the Vault. 
-
-```javascript
-{
-  "value": "...", 
-}
-```
-
-| Name | Type | Description |
-| :--- | :--- | :--- |
-|  |  |  |
+| `liquidity_token` | String | The contract address of the Vault's LP token |
