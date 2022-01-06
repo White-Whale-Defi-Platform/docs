@@ -102,6 +102,21 @@ pub enum ExecuteMsg {
 | :--- | :--- | :--- |
 | `details` | ArbDetails | Conveys the amount, max allowed slippage and belief price |
 
+### SendWarchestCommission
+
+Call executed by the profit check contract after a profitable trade. It forwards a portion of the profit to the treasury contract (aka war chest). The % of the profit sent as commission is set by the commission_fee. 
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    SendWarchestCommission { 
+        profit: Uint128 
+    },
+}
+
+```
+
 ### SetAdmin
 
 Change the established Admin for the Stablecoin Vault. Can only be called by the currently established Admin of the contract.
