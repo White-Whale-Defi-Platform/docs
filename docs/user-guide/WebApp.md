@@ -29,15 +29,15 @@ Station Extension is a Chrome extension that lets users interact with smart cont
 
 ![](assets/terra-extension1.png)
 
-1. Set a wallet name and password. **Make sure to record the created 24 word seed phrase in a secure storage**. Select **\[Next\]** to proceed.
+3. Set a wallet name and password. **Make sure to record the created 24 word seed phrase in a secure storage**. Select **\[Next\]** to proceed.
 
 ![](assets/terra-extension2.png)
 
-1. Confirm the created seed phrase by inputting the correct words.
+4. Confirm the created seed phrase by inputting the correct words.
 
 ![](assets/terra-extension3.png)
 
-1. Select **\[Create a wallet\]** to finish.
+5. Select **\[Create a wallet\]** to finish.
 
 ![](assets/terra-extension4.png)
 
@@ -60,7 +60,7 @@ To access Ledger from Terra Station Extension, the following steps are required:
 
 ![](assets/terra-extension5.png)
 
-1. Once Ledger has been successfully connected with Terra Station Extension, transactions can be signed with Ledger.
+4. Once Ledger has been successfully connected with Terra Station Extension, transactions can be signed with Ledger.
 
 ![](https://gblobscdn.gitbook.com/assets%2F-MLRzugf7mxc4ryNhTuq%2F-MMsz0hiKUhlI7K6Hu4t%2F-MMt82XaR7Sxw6v-WBj-%2Fimage.png?alt=media&token=0ae3faab-111c-4d95-b69d-4adee41f877d)
 
@@ -72,11 +72,11 @@ To access Ledger from Terra Station Extension, the following steps are required:
 
 ![](assets/terra-extension6.png)
 
-1. Enter a new wallet name and password.
+2. Enter a new wallet name and password.
 
 ![](assets/terra-extension-password.png)
 
-1. Enter the 24 word seed phrase of the wallet to recover and select **\[Next\]** to finish.
+3. Enter the 24 word seed phrase of the wallet to recover and select **\[Next\]** to finish.
 
 ![](https://gblobscdn.gitbook.com/assets%2F-MLRzugf7mxc4ryNhTuq%2F-MMsCvhqtM-AVYonMZ2s%2F-MMsp341Aiv2HFDiOGsP%2Fimage.png?alt=media&token=749f32cd-1d34-412b-9af1-486be5057025)
 
@@ -86,15 +86,13 @@ To access Ledger from Terra Station Extension, the following steps are required:
 
 ![](assets/terra-extension7.png)
 
-1. Input the information below and select **\[Next\]**:
+2. Input the information below and select **\[Next\]**:
 
 * Address of the recipient
 * Amount of tokens to send
 * Memo \(optional\)
 
-{% hint style="info" %}
-Station Extension also support cross-chain token transfers to Ethereum addresses through the [Shuttle](https://github.com/terra-project/shuttle) bridge. 
-{% endhint %}
+> Station Extension also support cross-chain token transfers to Ethereum addresses through the [Shuttle](https://github.com/terra-project/shuttle) bridge. 
 
 ![](assets/terra-extension8.png)
 
@@ -102,7 +100,7 @@ Station Extension also support cross-chain token transfers to Ethereum addresses
 
 ![](assets/terra-extension9.png)
 
-1. Station Extension will display the transaction result. Select **\[Ok\]** to return to the main page. 
+4. Station Extension will display the transaction result. Select **\[Ok\]** to return to the main page. 
 
 ![](assets/terra-extension10.png)
 
@@ -123,15 +121,11 @@ Users can swap Luna or Terra stablecoins such as TerraKRW \(KRT\), or TerraSDR \
 
 ![](assets/terra-extension11.png)
 
-1. Select the coin denomination to swap and the coin denomination to receive in the "Swap coins" section, found at the bottom of the page. The swap will be conducted based on the current "Terra exchange rate".
+2. Select the coin denomination to swap and the coin denomination to receive in the "Swap coins" section, found at the bottom of the page. The swap will be conducted based on the current "Terra exchange rate".
 
-{% hint style="info" %}
-The approximate spread and fee for performing the swap will be shown. The rules for determining the fees are covered in [Terra Docs](https://docs.terra.money/dev/spec-market).
-{% endhint %}
+> The approximate spread and fee for performing the swap will be shown. The rules for determining the fees are covered in [Terra Docs](https://docs.terra.money/dev/spec-market).
 
 3. Click **\[Next\]** and sign the transaction to complete the swap. 
-
-
 
 ### Purchasing Terra Stablecoins From an Exchange
 
