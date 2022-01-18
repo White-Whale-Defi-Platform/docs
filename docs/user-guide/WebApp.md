@@ -6,9 +6,8 @@ The **White Whale WebApp** offers a graphical user interface for accessing White
 
 White Whale will launch with 3 initial components: The Arb Vaults, Governance and the Treasury. 
 
-{% hint style="warning" %}
 The White Whale web app requires [Google Chrome](https://www.google.com/chrome/) and [Station Extension](https://chrome.google.com/webstore/detail/terra-station/aiifbnbfobpmeekipheeijimdpnlpgpp) to be installed. Please follow the instructions below to set up your browser to be able to access the WebApp.
-{% endhint %}
+
 
 ## Terra Station Extension
 
