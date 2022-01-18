@@ -1,4 +1,4 @@
-# Providing liquidity for WHALE Token
+# Liquidity Providing
 
 **Liquidity can be provided for WHALE Tokens** [**https://app.whitewhale.money/swap**](https://app.whitewhale.money/swap)**.**
 
@@ -12,36 +12,42 @@ The **WHALE** tokens can be used for governance staking and voting. See **STAKIN
 
 ![](assets/connect-wallet.png)
 
-2. Navigate to the **SWAP** page
+2. Navigate to the **\[SWAP\]** page
 
 ![](assets/swap1.png)
 
-3. Hit **POOL**
+3. Select **\[POOL\]**
 
 ![](assets/liquidity1.png)
 
-3. Confirm transaction in terra station by hitting post. 
+4. Enter equal amounts of WHALE and UST that you would like to provide as liquidity. Then select **\[PROVIDE\]**
+
+![](assets/liquidity4.png)
+
+5. Select **\[POST\]** to confirm the transaction 
 
 ![](assets/governance4.png)
-
-4. Your WHALE tokens will show up in your wallet shortly!
 
 ### Withdrawing WHALE-UST Liquidity
 
-1. Navigate to the **SWAP** page
+1. Navigate to the **\[SWAP\]** page
 
 ![](assets/swap1.png)
 
-2. Hit **POOL**
+2. Select **\[POOL\]**
 
 ![](assets/liquidity1.png)
 
-3. Hit Withdraw. Then enter the amount of WHALE-UST LP tokens you would like to withdraw and hit **Withdraw**
+3. Select **\[Withdraw\]**
+   
+![](assets/liquidity3.png)
+
+4.  Enter the amount of WHALE-UST LP tokens you would like to withdraw. Then select **\[Withdraw\]**
 
 ![](assets/liquidity2.png)
 
-3. Confirm transaction in terra station by hitting post. 
+5. Select **\[POST\]** to confirm the transaction
 
 ![](assets/governance4.png)
 
-4. Your WHALE and UST will show up in your wallet shortly!
+6. Your WHALE and UST will show up in your wallet shortly!

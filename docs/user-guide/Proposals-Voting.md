@@ -1,4 +1,4 @@
-# Creating and voting on proposals
+# Governance Proposals & Voting
 
 **Whale Tokens can be used for governance proposals and voting at** [**https://app.whitewhale.money/gov**](https://app.whitewhale.money/gov)**.**
 
@@ -9,13 +9,13 @@ The **White Whale Governance Staking V1** is a fork of Anchor Protocol's Governa
 
 ### Create a Governance Proposal
 
-1. Navigate to the **GOVERNANCE** page
+1. Navigate to the **\[GOVERNANCE\]** page
 
 ![](assets/governance1.png)
 
-2. Hit **Create Poll**
+2. Select **\[Create Poll\]**
 
-3. Enter a Title and a description. Then hit create Poll. 
+3. Enter a Title and a description. Then select **\[Create Poll\]** 
 
 ![](assets/proposals1.png)
 
