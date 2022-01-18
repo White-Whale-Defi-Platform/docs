@@ -6,7 +6,6 @@ The **White Whale Governance Staking V1** is a fork of Anchor Protocol's Governa
 
 The **White Whale Governance Staking V1** auto-compounds the rewards the rewards for the user. 
 
-
 > Tutorial assumes you have:  
 > A Terra Wallet. If not, see the WebApp section.  
 > WHALE tokens. If not, see the Swap section. 
