@@ -4,7 +4,9 @@
 
 The **WHALE** tokens can be used for governance staking and voting. See **STAKING** section for details. Note that the liquidity providing rewards are only from transaction fees. There are no token reward incentives for providing WHALE-UST liquidity. 
 
-> Tutorial below assumes you have the a Terra Wallet with UST and WHALE token. If not, see the WebApp and Swap sections.
+> Tutorial assumes you have:  
+> A Terra Wallet. If not, see the WebApp section.  
+> WHALE tokens. If not, see the Swap section. 
 
 ### Providing WHALE-UST Liquidity
 

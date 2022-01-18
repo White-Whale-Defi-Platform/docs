@@ -4,8 +4,9 @@
 
 The **White Whale Governance Staking V1** is a fork of Anchor Protocol's Governance Staking smart contracts. 5k WHALE is needed to create a proposal. If the proposal fails the WHALE tokens are forfeited. 
 
-> Tutorial below assumes you have the a Terra Wallet. If not, see the WebApp section. 
-> The tutorial also assumes you already have WHALE tokens. If you do not, see the Swap section. 
+> Tutorial assumes you have:  
+> A Terra Wallet. If not, see the WebApp section.  
+> WHALE tokens. If not, see the Swap section. 
 
 ### Create a Governance Proposal
 

@@ -4,9 +4,10 @@
 
 The **WHALE** tokens can be used for governance staking and voting. See **STAKING** section for details.  
 
-> Tutorial below assumes you have the a Terra Wallet with UST. If not, see the WebApp section. 
+> Tutorial assumes you have:  
+> A Terra Wallet. If not, see the WebApp section.
 
-### Swapping UST to WHALE Token
+### Swapping UST to WHALE
 
 1. Connect Wallet
 
