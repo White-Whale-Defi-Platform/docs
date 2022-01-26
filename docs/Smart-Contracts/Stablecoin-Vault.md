@@ -37,7 +37,7 @@ pub struct InstantiateMsg {
 | `anchor_money_market_address` | String | Contract address of Anchor Money Market system. This is used for depositing and withdrawing from Anchor |
 | `aust_address` | String | Contract address of aUST token |
 | `profit_check_address` | String | Contract address of Profit Check Contract |
-| `treasury_address` | String | Contract address of Profit Check Contract |
+| `treasury_address` | String | Contract address of Treasury Contract |
 | `asset_info` | AssetInfo | Struct detailing the token to be used for trading (the vault base token) |
 | `token_code_id` | u64 | The Stored Code Object ID for the LP token creator. This is used on instantiation to creation an LP token when the Vault is created |
 | `treasury_fee` | Decimal | Configurable fee rate for the treasury contract. |

@@ -28,8 +28,8 @@ pub struct InstantiateMsg {
 | :--- | :--- | :--- |
 | `vault_address` | String | Contract address of Anchor Money Market system. This is used for depositing and withdrawing from Anchor |
 | `seignorage_address` | String | Contract address of aUST token |
-| `pool_address` | String | Contract address of Profit Check Contract |
-| `treasury_address` | String | Contract address of Profit Check Contract |
+| `pool_address` | String | Contract address of LP Contract to be interacted with |
+| `treasury_address` | String | Contract address of Treasury Contract |
 | `asset_info` | AssetInfo | Struct detailing the token to be used for trading (the vault base token) |
 
 
