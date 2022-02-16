@@ -18,3 +18,29 @@ Other asset vaults, such as the LUNA ARB vault, will be added
 by the team as the development phase continues. Ultimately, the
 community will decide which new asset vaults to add through governance
 proposals
+
+> Vault Fees:  
+> Deposit - Anchor's Deposit Fee into Earn  
+> Withdrawal - 0.1%  
+> Arb Profit - 20% of any Arbitrage trade profit goes to Treasury  
+
+Note: Treasury does NOT take any percentage of the Anchor Earn Yield.
+
+## Arbitrage
+
+Arbitrage is the simultaneous purchase and sale of the same asset in different markets in order to profit from differences in the asset's listed price. Arbitrage exists as a result of market inefficiencies and it both exploits those inefficiencies and resolves them.
+
+White Whale currently takes advantage of arbitrage opportunities on Terra, specifically UST peg arbitrage, with plans to add more strategies and more chains. 
+
+## Flash Loans
+
+White Whale developed the first flash loans on Terra. 
+
+Flash Loan Explained:
+
+1. Call Flash Loan Smart Contract  
+2. UST provided from the Vault 
+3. User Actions 
+4. UST paid back to Vault + Fee
+
+Steps 1-4 steps all happen in 1 transaction.
