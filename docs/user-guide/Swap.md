@@ -9,40 +9,40 @@ The **WHALE** tokens can be used for governance staking and voting. See **STAKIN
 
 ### Swapping UST to WHALE
 
-1. Connect Wallet
+**1.** Connect Wallet
 
 ![](assets/connect-wallet.png)
 
-2. Navigate to the **\[SWAP\]** page
+**2.** Navigate to the **\[SWAP\]** page
 
 ![](assets/swap1.png)
 
-3. Enter the amount of UST you want to swap to WHALE. Then select **\[SWAP\]**. 
+**3.** Enter the amount of UST you want to swap to WHALE. Then select **\[SWAP\]**. 
 
 ![](assets/swap2.png)
 
-4. Select **\[POST\]** to confirm transaction
+**4.** Select **\[POST\]** to confirm transaction
 
 ![](assets/governance4.png)
 
-5. Your WHALE tokens will show up in your wallet shortly!
+**5.** Your WHALE tokens will show up in your wallet shortly!
 
 ### Swapping WHALE to UST
 
-1. Navigate to the **\[SWAP\]** page
+**1.** Navigate to the **\[SWAP\]** page
 
 ![](assets/swap1.png)
 
-2. Switch to swapping WHALE to UST by hitting the arrow icon. 
+**2.** Switch to swapping WHALE to UST by hitting the arrow icon. 
 
 ![](assets/swap3.png)
 
-3. Enter the Amount of WHALE you want to swap to UST then hit Swap. 
+**3.** Enter the Amount of WHALE you want to swap to UST then hit **\[Swap\]**. 
 
-![](assets/swap4.png)
+![](assets/swap5.png)
 
-4. Select **\[POST\]** to confirm transaction
+**4.** Select **\[POST\]** to confirm transaction
 
 ![](assets/governance4.png)
 
-5. Your UST will show up in your wallet shortly!
+**5.** Your UST will show up in your wallet shortly!

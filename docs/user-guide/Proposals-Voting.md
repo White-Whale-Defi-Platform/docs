@@ -10,13 +10,13 @@ The **White Whale Governance Staking V1** is a fork of Anchor Protocol's Governa
 
 ### Create a Governance Proposal
 
-1. Navigate to the **\[GOVERNANCE\]** page
+**1.** Navigate to the **\[GOVERNANCE\]** page
 
 ![](assets/governance1.png)
 
-2. Select **\[Create Poll\]**
+**2.** Select **\[Create Poll\]**
 
-3. Enter a Title and a description. Then select **\[Create Poll\]** 
+**3.** Enter a Title and a description. Then select **\[Create Poll\]** 
 
 ![](assets/proposals1.png)
 
