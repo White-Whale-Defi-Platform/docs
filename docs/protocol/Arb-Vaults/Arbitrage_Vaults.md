@@ -11,7 +11,7 @@ reflected in the intrest earned, will be:
 
 Besides in-house arbitrage strategies, White Whale will offer the posibility to 
 leverage the funds held inside the vault through flash loans. A small fee of X% will be
-charged on the borrowed funds. The smart contract logic enshures all funds are returned in
+charged on the borrowed funds. The smart contract logic ensures all funds are returned in
 the same transaction. A detailed description is provided in [this](https://medium.com/@whitewhaleterra/white-whale-releases-details-on-flash-loan-architecture-18cae06e5bef) Medium article.
 
 Other asset vaults, such as the LUNA ARB vault, will be added
