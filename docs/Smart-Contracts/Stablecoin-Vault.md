@@ -112,9 +112,9 @@ pub enum ExecuteMsg {
 
 ### FlashLoan
 
-Attempt to get a flashloan from the vault. The requested funds and callback message are encapsuled in the FlashLoanPayload struct. The provided callback is required to be an ExecuteMessage on contract requesting the funds. 
+Attempt to get a flashloan from the vault. The requested funds and callback message are encapsuled in the FlashLoanPayload struct. The provided callback should be the series of messages the caller wants to perform with the requested amount of funds. 
 
-If needed, funds are withdrawn from anchor. All incured fees are paid by the borrower. Two calls to the profit_check contract surround the flashloan callback msg to ensure the trade only finalizes if the contract makes a profit.
+If needed, funds are withdrawn from anchor. All incurred fees are paid by the borrower. Two calls to the profit_check logic surround the flashloan callback msg to ensure the trade only finalizes if the contract makes a profit.
 
 | Key | Type | Description |
 | :--- | :--- | :--- |

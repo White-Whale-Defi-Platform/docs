@@ -19,14 +19,19 @@ Flash Loans provide an innovative way for users of the Terra network to take out
 Steps 1-4 all happen in 1 transaction. The last step has some checks in place to ensure that overall the loan can be paid back in full with any fees but also that there is some degree of profit. If for example the repay functionality is not called or it is called with not enough funds, the entire flash loan with fail/revert and will have never been taken out. Instead only gas is spent.
 
 ## Applications of Flash Loans
-White Whale Flash Loans are already used in part by the White Whale Protocol liquidity on large arbs. Other examples in the wild include:
+White Whale Flash Loans are already used in part by the White Whale Protocol liquidity on large arbs. Other examples in the wild include:  
+
 + Arbitrage between assets, without needing to have the principal amount to execute the arbitrage.
 + Liquidating borrow positions, without having to repay the debt of the positions and using discounted collateral claimed to payoff flashLoan amount + fee.
-+ Arbitrage minting or burning of [Nebula Protocol Clusters]() to aid in the re-balancing of a given cluster capturing any delta as profit.
++ Arbitrage minting or burning of [Nebula Protocol Clusters](https://docs.neb.money/protocol/participants.html#arbitrageur) to aid in the re-balancing of a given cluster capturing any delta as profit.
 
 ## How to use Flash Loans
 
-### Calling the FlashLoan 
+Below provides a guideline on how you can make use of Flash Loans. The typical use case would be to take the below concepts and implement them in your own smart contract or series of scripts.
+
+We try to make this a little easier for you with our [Flash Loan Tools](https://github.com/White-Whale-Defi-Platform/whale-flashloan-tools) repo and contribution by community members is encouraged. After all White Whale is nothing without its community. 
+
+### Calling the `FlashLoan` on a Vault
 
 In order to take a Flash Loan. A prospective caller must send a `FlashLoan` variant of `ExecuteMsg` to the UST Vault. See [Flash Loan schema](../../Smart-Contracts/Stablecoin-Vault.md#flashloan) for an example JSON you can use as well as detailed info about each of the fields required in the request.
 
@@ -57,7 +62,9 @@ The White Whale Flash Loan approach is a little different in that we only have 1
 
 ### Helpful resources
 
-In addition to this doc, the White Whale team have provided an example repo, containing a starter smart contract which uses the flash loan capability of the Vault. This starter contract provides a quick getting-started point if you just want to focus on your use case and what should happen in between the loan and payback to generate a profit. 
+In addition to this doc, the White Whale team have provided an example repo, containing a starter smart contract which uses the flash loan capability of the Vault. This starter contract provides a quick getting-started point if you just want to focus on your use case and what should happen in between the loan and payback to generate a profit.
+
+[Flash Loan Tools](https://github.com/White-Whale-Defi-Platform/whale-flashloan-tools)
 
 In future we will update this repository with more of our internal and partner created flash loan use cases either in the form of just a contract or providing both a contract and a bot to call it. 
 
@@ -68,8 +75,8 @@ All of the above is nice and all but its still remains rather high level. To tru
 Starting with the flash loan call itself. Assuming we have provided a valid FlashLoanPayload the `handle_flashloan` execute message handler will first ensure the request asset is valid for the vault. 
 
 ```rust
-    // Check if requested asset is base token of vault
-    deposit_info.assert(&payload.requested_asset.info)?;
+// Check if requested asset is base token of vault
+deposit_info.assert(&payload.requested_asset.info)?;
 ```
 
 This ensures only UST can be requested from the UST Vault and Luna from the Luna Vault.
