@@ -33,8 +33,8 @@ the same transaction. A detailed description is provided in [this](https://mediu
 
 #### APR Calculation
 We take average of vault tvl and profits for last 7 days and:   
-1. 7daysAPR = (100 * weeklyProfit ) / tvlAverageLast7Days  
-2. APR = (365 * 7daysAPR ) / 7  
+1. weeklyAPR = (100 * weeklyProfit ) / tvlAverageLast7Days  
+2. APR = (365 * weeklyAPR ) / 7  
 
 #### Vault Fees
 
