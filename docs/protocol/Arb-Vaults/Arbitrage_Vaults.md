@@ -9,20 +9,18 @@ White Whale currently takes advantage of arbitrage opportunities on Terra, speci
 
 Our flagship product is the UST Vault. The vault deposits the UST into Anchor protocol to generate a base yield. The vault then performs arbitrage for additional risk free yield on top of the Anchor yield. 
 
-The UST vault's main purpose is to protect the UST peg through L1 seigniorage arbitrage. 
+The UST vault's main purpose is to protect the UST peg through L1 seigniorage arbitrage, but also earns revenue from Multi-Dex Arbitrage and Flash Loans. 
 
 **L1 Seigniorage Arbitrage: **   
-*Note: Validators must exchange 1 UST for a $1 worth of LUNA. *
+Note: Validators must exchange 1 UST for a $1 worth of LUNA. 
 
 When 1 UST < $1, exchange 1 UST for $1 worth of LUNA with validators sell LUNA on DEX.  
 When 1 UST > $1, buy LUNA with UST on DEX, then exchange $1 worth of LUNA for 1 UST with validators.  
 
-The UST's vaults other sources of yield come from multi-dex arbitrage and flash-loans. 
-
 **Multi-Dex Arbitrage:  **  
-Luna is trading at $99 dollars on Terraswap. 
-Luna is trading at $100 dollars on Astroport. 
-Buy on Terraswap sell on Astroport. 
+Luna is trading at $99 dollars on Terraswap.   
+Luna is trading at $100 dollars on Astroport.   
+Buy Luna on Terraswap sell on Astroport. 
 
 **Flash-Loans:  **  
 White Whale offers the possibility to 
@@ -34,9 +32,9 @@ the same transaction. A detailed description is provided in [this](https://mediu
 > Total Vault Yield = Anchor Yield + Arbitrage Profits (L1 + Multi-Dex Arbitrage) + Flashloan Income
 
 #### APR Calculation
-We take average of vault tvl and profits for last 7 days and: 
-1. 7daysAPR = (100 * weeklyProfit ) / tvlAverageLast7Days
-2. APR = (365 * 7daysAPR ) / 7
+We take average of vault tvl and profits for last 7 days and:   
+1. 7daysAPR = (100 * weeklyProfit ) / tvlAverageLast7Days  
+2. APR = (365 * 7daysAPR ) / 7  
 
 #### Vault Fees
 
