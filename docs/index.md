@@ -15,7 +15,7 @@ You can access the White Whale platform through the official [Web App](user-guid
 Deposited tokens are represented by vault tokens (vUST, vLUNA, ...). These tokens are redeemable for the initial deposit along with it's accrued interest, making these tokens auto-compouning. White Whale vaults are structured to provide depositors with:
 
 * **High, stable deposit yields** powered by the [Anchor Protocol](https://anchorprotocol.com)
-* **Arbitrage Exposure** through [White Whale abitrage](protocol/whale-token/Arbitrage_exposure.md) of stablecoin deposits
+* **Arbitrage Exposure** through [White Whale abitrage](protocol/Arb-Vaults/Arbitrage_Vaults.md) of stablecoin deposits
 
 White Whale is an open, permissionless arbitrage protocol, meaning that any third-party application is free to connect and earn interest without restrictions.
 Furthermore, all arbitrage contracts are publicly callable. 
