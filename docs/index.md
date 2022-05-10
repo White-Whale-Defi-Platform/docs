@@ -28,7 +28,7 @@ Learn more about White Whale Protocol, its core smart contracts, and Python SDK.
 
 * Learn more about the [Governance](protocol/governance/Governance-Overview.md).
 * Read up on the specifics of each contract such as the [Stablecoin Vault](Smart/../Smart-Contracts/Stablecoin-Vault.md). 
-* Check out the [User Guide](user-guide/README.md).
+* Check out the [User Guide](user-guide/index.md).
 
 ## Community
 
