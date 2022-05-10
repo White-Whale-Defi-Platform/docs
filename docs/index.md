@@ -6,7 +6,7 @@ description: Welcome to the White Whale documentation site.
 
 Welcome to the White Whale Protocol's documentation site.
 
-You can access the White Whale platform through the official [Web App](user-guide/webapp/).
+You can access the White Whale platform through the official [Web App](user-guide/WebApp.md).
 
 ## What is White Whale?
 
